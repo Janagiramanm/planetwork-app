@@ -148,6 +148,31 @@ class JobController extends Controller
 
     }
 
+    public function jobStatusUpdate(Request $request){
+
+       
+        $job_status = $request->status;
+        $assign_id = $request->job_assign_id;
+        
+        $jobUpdate = AssignJobEmployee::find($assign_id);
+        if(!$jobUpdate){
+            return response()->json([
+                'status' => 0,
+                'message' => 'No data found'
+            ]);
+        }
+
+        $jobUpdate->job_status = $job_status;
+        $jobUpdate->save();
+
+        return response()->json([
+            'status' => 1,
+            'message' => 'Status Successfully Updated'
+
+        ]);
+
+    }
+
     public function tasks(Request $request){
 
           $tasks = Task::all();

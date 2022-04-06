@@ -39,6 +39,7 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::get('tasks', 'App\Http\Controllers\Api\JobController@tasks')->name('tasks');
     Route::post('jobs', 'App\Http\Controllers\Api\JobController@getJobs')->name('jobs');
     Route::post('job-update', 'App\Http\Controllers\Api\JobController@jobUpdate')->name('job-update');
+    Route::post('job-status-update', 'App\Http\Controllers\Api\JobController@jobStatusUpdate')->name('job-status-update');
     
     Route::post('add-over-time', 'App\Http\Controllers\Api\JobController@addOverTime')->name('add-over-time');
     
