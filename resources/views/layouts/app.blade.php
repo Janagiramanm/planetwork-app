@@ -84,7 +84,7 @@
 											<span class="flex font-medium text-sm text-gray-400 px-4 my-4 uppercase bg-indigo-400 w-60 p-3">Reports</span>
 										</li>
                                         <li class="mr-3 mt-2 flex-1">
-                                            <x-jet-nav-link href="{{ route('leaves') }}" :active="request()->routeIs('leaves')">
+                                            <x-jet-nav-link href="{{ route('attendance') }}" :active="request()->routeIs('attendance')">
                                             <i class="fas fa-envelope-open-text pr-0 md:pr-3"></i></i></i><span class="pb-1 md:pb-0 text-xs md:text-base text-gray-600 md:text-gray-400 block md:inline-block">Attendance</span>
                                             </x-jet-nav-link>
                                         </li>

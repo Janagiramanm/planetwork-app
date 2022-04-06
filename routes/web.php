@@ -14,6 +14,7 @@ use App\Http\Livewire\Leaves;
 use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\Reports;
 use App\Http\Livewire\Holidays;
+use App\Http\Livewire\Attendance;
 
 
 /*
@@ -54,6 +55,8 @@ Route::get('leaves', Leaves::class)->name('leaves');
 Route::get('reports', Reports::class)->name('reports');
 
 Route::get('holidays', Holidays::class)->name('holidays');
+
+Route::get('attendance', Attendance::class)->name('attendance');
 
 
 
