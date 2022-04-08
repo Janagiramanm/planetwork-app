@@ -41,6 +41,7 @@ class AuthController extends Controller
             //     'message' => 'Invalid OTP'
             //     ]);
         // }
+        $user = User::where('mobile', $request['mobile'])->first();
         if($request['otp'] == '1111'){
 
                 $token = $user->createToken('auth_token')->plainTextToken;
