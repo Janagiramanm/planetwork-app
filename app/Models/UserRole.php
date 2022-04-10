@@ -25,4 +25,9 @@ class UserRole extends Model
         return $this->belongsTo(Role::class); 
     }
 
+    public function roles() {
+        $userRoles = UserRole::where('user_id', $this->id)->get()->pluck('role_id');
+        return Role::whereIn('id', $userRoles);
+    }
+
 }

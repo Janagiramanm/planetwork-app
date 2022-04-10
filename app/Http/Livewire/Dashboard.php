@@ -3,11 +3,13 @@
 namespace App\Http\Livewire;
 
 use App\Models\TrackLocations;
+use App\Models\User;
 use App\Models\UserRole;
 use Livewire\Component;
 use Carbon\Carbon;
 use DB;
 use DateTime;
+use URL;
 
 
 
@@ -15,7 +17,8 @@ class Dashboard extends Component
 {
     public $locations,$lat,$lng, $user_id, $job_date, $details, $date, $reslatLong, $wayPoints,
            $apiKey, $count, $distance, $user_name,$from_address,$to_address,$ideal,$ideal_locations,
-           $from_date,$to_date,$customer_type, $business, $individual, $show;
+           $from_date,$to_date,$customer_type, $business, $individual, $show, $baseUrl, $new_time, $insert_date,
+           $threeHours,$thirtyMinutes,$totalDuration;
     public $latLong = [];
     public $detailMap = false;
       
@@ -25,78 +28,75 @@ class Dashboard extends Component
    
     public function render()
     {
-        $curdate = date('Y-m-d');
+        $curdate = date('Y-m-d H:i:s');
         
         // $startdate = isset( $this->from_date) ? $this->from_date:$curdate;
         // $enddate = isset($this->to_date) ? $this->to_date:$curdate;
-        $this->user_id = isset($_GET['user_id'])!='' ? $_GET['user_id']:'';
-        $this->from_date = isset($_GET['from_date']) ? $_GET['from_date']:$curdate;
-        $this->to_date = isset($_GET['to_date']) ? $_GET['to_date']:$curdate;
-        $userCondition = '';
-        if($this->user_id!=''){
-           $userCondition = " and user_id = ".$this->user_id;
-        }
+        $user_id = isset($_GET['user_id'])!='' ? $_GET['user_id']:'';
+        // $this->from_date = isset($_GET['from_date']) ? $_GET['from_date']:$curdate;
+        // $this->to_date = isset($_GET['to_date']) ? $_GET['to_date']:$curdate;
+        // $userCondition = '';
+        // if($this->user_id!=''){
+        //    $userCondition = " and user_id = ".$this->user_id;
+        // }
     
+        $this->users= User::when($user_id, function ($q) use ($user_id) {
+                 $q->where('id', $user_id);
+        })->whereHas('role', function ($query) {
+            $query->where('role_id', '=', '3');
+         })->get();
+
        
 
-        //$this->customers = Customer::get();
-      //  $this->business = Customer::where('customer_type','=','BUSINESS')->get();
-        $this->users = UserRole::where('role_id','=',3)->get();
-
-        ///echo $startdate.'---'.$enddate;exit;
         $trackIds = [];
-        $users  = DB::select('SELECT * 
+        if($this->users){
+            foreach($this->users as $user){
+
+                $users[$user->id]['name'] = $user->name;
+                $users[$user->id]['lat']  = $user->employeeDetail->latitude ?? 13.02313732; 
+                $users[$user->id]['lng']  = $user->employeeDetail->longitude ?? 77.6471962; 
+                $users[$user->id]['location'] = DB::select('SELECT * 
                                         FROM track_locations 
                                         INNER JOIN 
-                                        (SELECT MAX(id) as id FROM track_locations where date BETWEEN "'.$this->from_date.'" and "'.$this->to_date.'" '.$userCondition.'  and status = 1  GROUP BY user_id,date) last_updates 
+                                        (SELECT MAX(id) as id FROM track_locations where user_id = '. $user->id .'  and status = 1) last_updates 
                                         ON last_updates.id = track_locations.id');
-
-        if($users){
-            foreach($users as $key => $user){
-                $trackIds[] = $user->id;
             }
-        }                                    
+  
+            if($users){
+                foreach($users as $key => $value){
+                     
+                       $insert_date = date('d-m-Y H:i:s',strtotime($value['location'][0]->date.''.$value['location'][0]->time));
+                       $thirtyMinutes = date("Y-m-d H:i:s", strtotime('-30 minutes', strtotime($curdate)));
+                       $threeHours = date("Y-m-d H:i:s", strtotime('-3 hours', strtotime($curdate))); // $now + 3 hours
+                       $insert_date = Carbon::parse($insert_date);
+                       
+                       if(Carbon::now()->subHours(3) > $insert_date ){
+                            $marker = "red";
+                        }else if(Carbon::now()->subMinutes(30) > $insert_date ){
+                            $marker = "orange";
+                        }else{
+                            $marker = "green";
+                        }
+                   
+                        $date = date('d-m-Y',strtotime($value['location'][0]->date));
 
-        
-        
-        // $this->locations  = TrackLocations::whereIn('time', function($query) use ($curdate) {
-        //                             $query->selectRaw('max(`time`)')
-        //                             ->from('track_locations')
-        //                             ->where('date', '=', $curdate)
-        //                             ->groupBy('user_id')->orderBy('time', 'asc');
-        //                         })->select('user_id', 'date', 'time', 'latitude', 'longitude')
-        //                         ->where('date', '=', $curdate)
-        //                         ->orderBy('time', 'asc')
-        //                         ->get();
-
-       $this->locations  = TrackLocations::whereIn('id',$trackIds)->get();
-
-     
-      
-        $res = [];
-        if($this->locations->isEmpty()){
-            $this->lat = 13.02313732;
-            $this->lng = 77.6471962;
-        }
-        if($this->locations){
-            foreach($this->locations as $key => $value){
-                
-
-                 $details = '<b>'.$value->user->name.'</b><br> Date : '.date('d-m-Y',strtotime($value->date)) 
-                          .'<br> Time : '. $value->time;
-               
-                $res[] = ['lat'=>$value->latitude, 'lng'=>$value->longitude, 'details'=>$details, 'user_id'=>$value->user_id, 'date'=>$value->date];
-                //$res[] = [$details, $value->latitude, $value->longitude, $key, $value->user_id, $value->date];
-                // $res[] = [$details, $value->latitude, $value->longitude, $key];
-                $this->lat =  $value->latitude;
-                $this->lng = $value->longitude;
-                $this->user_id = $value->user_id;
-                $this->job_date = $value->date;
-               
-                
+                        $this->lat = isset($value['location'][0]->latitude) ? $value['location'][0]->latitude : $value['lat'];
+                        $this->lng = isset($value['location'][0]->longitude) ? $value['location'][0]->longitude : $value['lng'];
+                        $details = '<b>'.$value['name'].'</b><br> Date : '.$date.'<br> Time :'. $value['location'][0]->time;
+                        $res[] = ['lat'=>$this->lat, 'lng'=>$this->lng, 'details'=>$details, 'user_id'=>$key, 'date'=>$date, 'markerColor'=>$marker];
+                }
             }
+
+               
         }
+       
+        $this->user_id = $user_id ?? '';
         $this->latLong = json_encode($res, JSON_NUMERIC_CHECK);
+        $this->baseUrl = URL::to('/');
+
+        // echo '<pre>';
+        // print_r($this->latLong);
+        // exit; 
 
         return view('livewire.dashboard.dashboard');
     }
@@ -155,10 +155,12 @@ class Dashboard extends Component
 
             // echo '<pre>';
             // print_r($this->locations->count());
-            // print_r($this->locations);
+            print_r($this->locations);
             // exit;
         $res = [];
-        if($this->locations){
+        $reslatLong=[];
+     
+        if(!$this->locations->isEmpty()){
             foreach($this->locations as $key => $value){
                 
                 $details = '<b>'.$value->user->name.'</b><br> Date : '.date('d-m-Y',strtotime($value->date)) 

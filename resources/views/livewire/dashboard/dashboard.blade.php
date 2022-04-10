@@ -20,25 +20,22 @@
                     <div class="flex flex-wrap -mx-3 mb-6">
                             <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
                                     <x-jet-label for="user_id" value="{{ __('Employee') }}" />
+                                   
                                     <select id="user_id" wire:model.defer="user_id"   class="block mt-1 w-4/5 p-2  bg-gray-200" name="user_id">
                                     <option value="">Select User</option>
+                                   
+
                                     @foreach ($users as $user)
-                                                <option value="{{ $user->user->id }}">
-                                                        {{ ucfirst($user->user->name) }}  
+                                               @if(isset($user->id))
+                                                <option value="{{ $user->id }}">
+                                                        {{ ucfirst($user->name) }}  
                                                 </option>
-                                              
+                                              @endif
                                     @endforeach
                                    </select>
                                    @error('user_id') <span class="font-mono text-xs text-red-700">{{ $message }}</span> @enderror
                             </div>
-                            <div class="w-1/5">
-                                <x-jet-label for="from_date" value="{{ __('From Date') }}" />
-                                <x-datepicker wire:model.defer="from_date" id="from_date" :error="'from_date'" name="from_date" />
-                            </div>
-                            <div class="w-1/5">
-                                <x-jet-label for="to_date" value="{{ __('To Date') }}" />
-                                <x-datepicker wire:model.defer="to_date" id="from_date" :error="'to_date'" name="to_date" />
-                            </div>
+                          
                           
                             <div class="w-1/5">
                                  <x-jet-button  class="bg-orange-500 hover:bg-orange-700  mt-4" >
@@ -80,6 +77,9 @@ $('document').ready(function(){
 
                  const geocoder = new google.maps.Geocoder();
                  const apikey = "@php echo env('GOOGLEMAPAPI') @endphp";
+                 var APP_URL = {!! json_encode(url('/')) !!}
+                // alert(APP_URL);
+                //  alert(baseUrl);
                 //const infowindow = new google.maps.InfoWindow();
                // var infowindow = [];
                
@@ -95,6 +95,7 @@ $('document').ready(function(){
                        //var address=["madurai","chennai"];
                        var infowindow = [];
                       
+                     
                    
                         for (i = 0; i < locations.length; i++) { 
 
@@ -104,7 +105,9 @@ $('document').ready(function(){
                               
                                const user_id = `${locations[i].user_id}`;
                                const date = `${locations[i].date}`;
+                               const markerIcon = locations[i].markerColor;
                                const k = `${i}`;
+
                               
 
                                        $.get({ url: `https://maps.googleapis.com/maps/api/geocode/json?latlng=${locations[i].lat},${locations[i].lng}&sensor=false&key=${apikey}`,
@@ -129,6 +132,9 @@ $('document').ready(function(){
                                                                                                 var marker = new google.maps.Marker({
                                                                                                 position: results[0].geometry.location,
                                                                                                 map: map,
+                                                                                                icon: {
+                                                                                                   url: APP_URL+'/images/markers/'+markerIcon+'.png'
+                                                                                                }
                                                                                                 // content: details+ results[0].formatted_address
                                                                                                 });
                                                                                                 google.maps.event.addListener(marker, 'mouseover', function() {
