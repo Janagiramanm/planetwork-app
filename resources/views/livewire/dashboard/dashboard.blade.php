@@ -128,12 +128,16 @@ $('document').ready(function(){
                                                                                                         content: locations[k].details+'<br><b>' + results[0].formatted_address + '</b>',
                                                                                                         size: new google.maps.Size(150, 50)
                                                                                                 });
+
+                                                                                                console.log('userId',user_id);
+                                                                                                console.log('date==', date);
                         
                                                                                                 var marker = new google.maps.Marker({
                                                                                                 position: results[0].geometry.location,
                                                                                                 map: map,
                                                                                                 icon: {
                                                                                                    url: APP_URL+'/images/markers/'+markerIcon+'.png'
+                                                                                                   
                                                                                                 }
                                                                                                 // content: details+ results[0].formatted_address
                                                                                                 });

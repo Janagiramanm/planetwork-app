@@ -39,18 +39,21 @@ class Dashboard extends Component
         // if($this->user_id!=''){
         //    $userCondition = " and user_id = ".$this->user_id;
         // }
-    
-        $this->users= User::when($user_id, function ($q) use ($user_id) {
-                 $q->where('id', $user_id);
-        })->whereHas('role', function ($query) {
+
+        $this->users = User::whereHas('role', function ($query) {
             $query->where('role_id', '=', '3');
          })->get();
 
        
+        $usersList= User::when($user_id, function ($q) use ($user_id) {
+                         $q->where('id', $user_id);
+                })->whereHas('role', function ($query) {
+                         $query->where('role_id', '=', '3');
+                })->get();
 
         $trackIds = [];
-        if($this->users){
-            foreach($this->users as $user){
+        if($usersList){
+            foreach($usersList as $user){
 
                 $users[$user->id]['name'] = $user->name;
                 $users[$user->id]['lat']  = $user->employeeDetail->latitude ?? 13.02313732; 
@@ -102,34 +105,7 @@ class Dashboard extends Component
     }
 
     public function getDetailPath($user_id, $date){
-           $this->detailMap = true;
-        //    $user_id = 2;
-        //    $date = "2021-10-26";
-        //    $start_time = "18:50";
-        //    $end_time ="23:10";
-
-        // SELECT * 
-        //                                 FROM track_locations 
-        //                                 INNER JOIN 
-        //                                 (SELECT MAX(id) as id,FLOOR(UNIX_TIMESTAMP(time)/(15 * 60)) AS timekey FROM track_locations where status = 1  GROUP BY timekey) last_updates 
-        //                                 ON last_updates.id = track_locations.id
-
-        // $users  = DB::select('SELECT * 
-        //                         FROM track_locations 
-        //                         INNER JOIN 
-        //                         (SELECT MAX(id) as id,FLOOR(UNIX_TIMESTAMP(time)/(15 * 60)) AS timekey FROM track_locations where status = 1  GROUP BY timekey) last_updates 
-        //                         ON last_updates.id = track_locations.id');
-
-        // if($users){
-        //     foreach($users as $key => $user){
-        //         $trackIds[] = $user->id;
-        //     }
-        // }  
-
-        // $this->locations  = TrackLocations::whereIn('id',$trackIds)
-        
-        // ->get();
-
+        $this->detailMap = true;
         $date = date('Y-m-d',strtotime($date));
 
         $idealLocation = $this->idealLocations($user_id, $date);
@@ -139,26 +115,6 @@ class Dashboard extends Component
         ->orderBy('time', 'asc')
         ->get();
 
-
-
-
-
-
-
-
-            // $this->locations = TrackLocations::select('user_id', 'date', 'time' , 'latitude', 'longitude')
-            // ->where('date', '=', $date)
-            // ->where('user_id', '=', $user_id)
-            // ->whereBetween('time',[$start_time,$end_time])
-            // // ->groupBy('latitude','longitude','user_id', 'date')
-            // ->orderBy('created_at', 'asc')
-           
-            // ->get();
-
-            // echo '<pre>';
-            // print_r($this->locations->count());
-            print_r($this->locations);
-            // exit;
         $res = [];
         $reslatLong=[];
      
@@ -180,7 +136,6 @@ class Dashboard extends Component
                 $this->job_date = $value->date;
                 $this->user_name = $value->user->name;
             }
-          //  $this->wayPoints = json_encode($wayPoints, JSON_NUMERIC_CHECK);
             $this->date = $date;
             $this->reslatLong = json_encode($reslatLong, JSON_NUMERIC_CHECK);
             $this->apiKey = env('GOOGLEMAPAPI');
