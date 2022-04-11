@@ -68,7 +68,7 @@ class Dashboard extends Component
             // echo '<pre>';
             // print_r($users);
             // exit;
-
+            $res = [];
   
             if($users){
                 foreach($users as $key => $value){
