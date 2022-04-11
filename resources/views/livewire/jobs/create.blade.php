@@ -122,7 +122,7 @@
                 </div>
                 <div class="flex flex-wrap -mx-3 mb-6">
                                 <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                                <x-datepicker wire:model="date" id="date" :error="'date'" name="date" />
+                                <x-datepicker class="datepicker" wire:model="date" id="date" :error="'date'" name="date" />
                                 <br>
                                 @error('date') <span class="font-mono text-xs text-red-700">{{ $message }}</span> @enderror
                                 </div>
@@ -153,3 +153,13 @@
 @include('livewire/input/adminInput-js')
 
 
+@push('scripts')
+<script>
+   $('.datepicker').datepicker({ 
+
+      minDate: new Date()
+
+});
+
+</script>
+@endpush

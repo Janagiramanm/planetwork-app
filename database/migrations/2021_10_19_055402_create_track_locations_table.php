@@ -16,6 +16,7 @@ class CreateTrackLocationsTable extends Migration
         Schema::create('track_locations', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('job_id');
             $table->date('date');
             $table->time('time');
             $table->text('latitude');

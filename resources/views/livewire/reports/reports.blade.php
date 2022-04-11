@@ -73,21 +73,16 @@
                     <div wire:loading.remove>
                          <table class="min-w-full leading-normal">
                              <tr>
-                                <th  class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"> 
-                                    Date  
-                                </th>
-                                <th  class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"> 
-                                    Start Time  
-                                </th>
-                                <th  class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"> 
-                                    End Time  
-                                </th>
-                                <th  class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"> 
-                                From</th>
-                                <th  class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"> 
-                                To </th>
-                                <th  class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"> 
-                                Status </th>
+                                <th class="px-4 py-2 w-20">Date</th>
+                                    <th class="px-4 py-2">Employees</th>
+                                    <th class="px-4 py-2">Customer Name</th>
+                                    <th class="px-4 py-2">Jobs</th>
+                                    <th class="px-4 py-2">Status</th>   
+                                    <th class="px-4 py-2">From</th>
+                                    <th class="px-4 py-2">To</th>    
+                                    <th class="px-4 py-2">Travel Time</th>  
+                                    <th class="px-4 py-2">SR No</th>
+                               
                              </tr>
                                 @if(!$result)
                                    <tr><td colspan="6" class="text-center">No Result Found</td></tr>

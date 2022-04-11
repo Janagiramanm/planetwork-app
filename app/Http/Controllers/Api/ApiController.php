@@ -72,6 +72,7 @@ class ApiController extends Controller
 
                     $track = new TrackLocations();
                     $track->user_id = $value['user_id'];
+                    $track->job_id = $value['job_id'];
                     $track->date = $value['date'];
                     $track->time = $value['time'];
                     $track->latitude = $value['lat'];
