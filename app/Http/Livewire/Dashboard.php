@@ -130,6 +130,8 @@ class Dashboard extends Component
         
         // ->get();
 
+        $date = date('Y-m-d',strtotime($date));
+
         $idealLocation = $this->idealLocations($user_id, $date);
         $this->locations = TrackLocations::where('date', '=', $date)
         ->where('user_id', '=', $user_id)
