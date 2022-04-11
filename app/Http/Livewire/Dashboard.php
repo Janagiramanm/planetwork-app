@@ -65,14 +65,15 @@ class Dashboard extends Component
                                         ON last_updates.id = track_locations.id');
             }
 
-            echo '<pre>';
-            print_r($users);
-            exit;
+            // echo '<pre>';
+            // print_r($users);
+            // exit;
 
   
             if($users){
                 foreach($users as $key => $value){
                      
+                    if(isset($value['location'][0]->id)){
                        $insert_date = date('d-m-Y H:i:s',strtotime($value['location'][0]->date.''.$value['location'][0]->time));
                        $thirtyMinutes = date("Y-m-d H:i:s", strtotime('-30 minutes', strtotime($curdate)));
                        $threeHours = date("Y-m-d H:i:s", strtotime('-3 hours', strtotime($curdate))); // $now + 3 hours
@@ -92,6 +93,7 @@ class Dashboard extends Component
                         $this->lng = isset($value['location'][0]->longitude) ? $value['location'][0]->longitude : $value['lng'];
                         $details = '<b>'.$value['name'].'</b><br> Date : '.$date.'<br> Time :'. $value['location'][0]->time;
                         $res[] = ['lat'=>$this->lat, 'lng'=>$this->lng, 'details'=>$details, 'user_id'=>$key, 'date'=>$date, 'markerColor'=>$marker];
+                    }
                 }
             }
 
