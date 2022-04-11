@@ -64,6 +64,11 @@ class Dashboard extends Component
                                         (SELECT MAX(id) as id FROM track_locations where user_id = '. $user->id .'  and status = 1) last_updates 
                                         ON last_updates.id = track_locations.id');
             }
+
+            echo '<pre>';
+            print_r($users);
+            exit;
+
   
             if($users){
                 foreach($users as $key => $value){
