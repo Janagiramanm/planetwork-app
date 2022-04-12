@@ -21,7 +21,7 @@ class Reports extends Component
 
         $this->users = UserRole::where('role_id','=',3)->get();
         $this->from_date = Carbon::now()->format('Y-m-d');
-        $this->to_date = Carbon::now()->format('Y-m-d');
+        $this->to_date = Carbon::now()->format('Y-m-d'); 
         return view('livewire.reports.reports');
     }
 
