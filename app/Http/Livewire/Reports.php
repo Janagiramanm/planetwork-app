@@ -20,86 +20,115 @@ class Reports extends Component
     {
 
         $this->users = UserRole::where('role_id','=',3)->get();
+        $this->from_date = Carbon::now()->format('Y-m-d');
+        $this->to_date = Carbon::now()->format('Y-m-d');
         return view('livewire.reports.reports');
     }
 
-    public function generateWorkReport(){
-                $this->validate([
-                    'user_id' => 'required',
-                    'from_date' => 'required',
-                    'to_date' => 'required',
-                ]);
-                $this->show =true;
-                $this->detailReport = false;
-                $this->result = null;
-
-                $jobs = AssignJobEmployee::where('user_id','=', $this->user_id)
-                                          ->whereBetween('created_at',[$this->from_date, $this->to_date])->get();
-
-                echo "<pre>";
-                //print_r($jobs);
-                if($jobs){
-                    foreach($jobs as $key => $value){
-                        // $dateWiseData[$value->date] =  DB::select('(SELECT * FROM track_locations where user_id = '.$this->user_id.' and date = "'.$value->date.'" ORDER BY id LIMIT 1)
-                        //                                       UNION ALL
-                        //                                       (SELECT * FROM track_locations where user_id = '.$this->user_id.' and date = "'.$value->date.'" ORDER BY id DESC LIMIT 1)');
-                        $this->result[$key]=[
-                               'user_id' => $value['user_id'],
-                               'user_name' => $value->user->name
-                        ];
-                        // $result['user_id'] = $value['user_id'];
-                        // $result['user_name'] = $value->user->name;
-                    }
-                    print_r($this->result);
-                    exit;
-                }
-
-    }
     // public function generateWorkReport(){
-    //     $this->validate([
-    //         'user_id' => 'required',
-    //         'from_date' => 'required',
-    //         'to_date' => 'required',
-    //     ]);
+    //             $this->validate([
+    //                 'user_id' => 'required',
+    //                 'from_date' => 'required',
+    //                 'to_date' => 'required',
+    //             ]);
+    //             $this->show =true;
+    //             $this->detailReport = false;
+    //             $this->result = null;
 
-    //     $this->show =true;
-    //     $this->detailReport = false;
-    //     $this->result = null;
+    //             $jobs = AssignJobEmployee::where('user_id','=', $this->user_id)
+    //                                       ->whereBetween('created_at',[$this->from_date, $this->to_date])->get();
+
+    //             echo "<pre>";
+    //             //print_r($jobs);
+    //             if($jobs){
+    //                 foreach($jobs as $key => $value){
+    //                     // $dateWiseData[$value->date] =  DB::select('(SELECT * FROM track_locations where user_id = '.$this->user_id.' and date = "'.$value->date.'" ORDER BY id LIMIT 1)
+    //                     //                                       UNION ALL
+    //                     //                                       (SELECT * FROM track_locations where user_id = '.$this->user_id.' and date = "'.$value->date.'" ORDER BY id DESC LIMIT 1)');
+    //                     $this->result[$key]=[
+    //                            'user_id' => $value['user_id'],
+    //                            'user_name' => $value->user->name
+    //                     ];
+    //                     // $result['user_id'] = $value['user_id'];
+    //                     // $result['user_name'] = $value->user->name;
+    //                 }
+    //                 print_r($this->result);
+    //                 exit;
+    //             }
+
+    // }
+
+    public function generateWorkReport(){
+        $this->validate([
+            'user_id' => 'required',
+            'from_date' => 'required',
+            'to_date' => 'required',
+        ]);
+
+        $this->show =true;
+        $this->detailReport = false;
+        $this->result = null;
         
 
 
-    //     $result = DB::table('track_locations')
-    //     ->select(DB::raw('DATE(date) as date'))
-    //     ->where('user_id','=', $this->user_id)
-    //     ->whereBetween('date',[$this->from_date, $this->to_date])
-    //     ->groupBy('date')
-    //     ->get();
+        $result = TrackLocations::where('user_id','=', $this->user_id)
+        ->whereBetween('date',[$this->from_date, $this->to_date])
+        ->select(DB::raw('DATE(date) as date,user_id,job_id'))
+        ->groupBy('date','user_id','job_id')
+        ->get();
+
+        // $result = DB::table('track_locations')
+        // ->select(DB::raw('DATE(date) as date'))
+        // ->where('user_id','=', $this->user_id)
+        // ->whereBetween('date',[$this->from_date, $this->to_date])
+        // ->groupBy('date')
+        // ->get();
 
       
-    //     if($result){
-    //         $dateWiseData = [];
-    //         foreach($result as $key => $value){
-    //              $dateWiseData[$value->date] =  DB::select('(SELECT * FROM track_locations where user_id = '.$this->user_id.' and date = "'.$value->date.'" ORDER BY id LIMIT 1)
-    //                                                          UNION ALL
-    //                                                          (SELECT * FROM track_locations where user_id = '.$this->user_id.' and date = "'.$value->date.'" ORDER BY id DESC LIMIT 1)');
-    //         }
+        // echo '<pre>';
+        // print_r($result);
 
+      
+        if($result){
+            $dateWiseData = [];
+            foreach($result as $key => $value){
+                 $dateWiseData[$value->date] =  DB::select('(SELECT * FROM track_locations where user_id = '.$this->user_id.' and date = "'.$value->date.'" ORDER BY id LIMIT 1)
+                                                             UNION ALL
+                                                             (SELECT * FROM track_locations where user_id = '.$this->user_id.' and date = "'.$value->date.'" ORDER BY id DESC LIMIT 1)');
+                 $dateWiseData[$value->date]['user_name'] = $value->user->name;
+                 $dateWiseData[$value->date]['customer_name'] = $value->job->customer->first_name;
+                 $dateWiseData[$value->date]['job'] = $value->job->task->name;
+                 $dateWiseData[$value->date]['status'] = $value->job->status;
+                 $dateWiseData[$value->date]['sr_no'] = ($value->job->id < 100) ? 'SR00'.$value->job->id : 'SR'.$value->job->id;
+
+            }
+
+            // echo '<pre>';
+            // print_r($dateWiseData);
            
-    //         if(!empty($dateWiseData)){
-    //             foreach($dateWiseData as $key => $value){
-    //                 $this->result[$key] = [
-    //                             'date' => $value[0]->date,
-    //                             'start_time' =>  $value[0]->time,
-    //                             'end_time' => $value[1]->time,
-    //                             'from_address' => $this->getAddress($value[0]->latitude,$value[0]->longitude),
-    //                             'to_address' => $this->getAddress($value[1]->latitude,$value[1]->longitude)                               
-    //                 ];
-    //             }
-    //         }
+            if(!empty($dateWiseData)){
+                foreach($dateWiseData as $key => $value){
+                        $this->result[$key] = [
+                            'sr_no' => $value['sr_no'],
+                            'date' => $value[0]->date,
+                            'user_id' => $value[0]->user_id,
+                            'user_name' => $value['user_name'],
+                            'customer_name' => $value['customer_name'],
+                            'job' => $value['job'],
+                            'status' => $value['status'],
+                            'start_time' =>  $value[0]->time,
+                            'end_time' => $value[1]->time,
+                            'from_address' => $this->getAddress($value[0]->latitude,$value[0]->longitude),
+                            'to_address' => $this->getAddress($value[1]->latitude,$value[1]->longitude)                               
+                        ];
+                }
+            }
+
+           // print_r($this->result);
           
-    //     }
+        }
        
-    // }
+    }
 
     public function getAddress($lat,$lng){
         $url="https://maps.google.com/maps/api/geocode/json?latlng=".$lat.",".$lng."&key=".env('GOOGLEMAPAPI');

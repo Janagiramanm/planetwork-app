@@ -87,15 +87,21 @@
                                 @if(!$result)
                                    <tr><td colspan="6" class="text-center">No Result Found</td></tr>
                                 @else
+
+                                       
                         
                                     @foreach($result as $key => $value)
                                         <tr>
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['date'] }}  </td>
-                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['start_time'] }} </td>
-                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['end_time'] }} </td>
+                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['user_name'] }} </td>
+                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['customer_name'] }} </td>
+                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['job'] }} </td>
+                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['status'] }} </td>
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['from_address'] }}</td>
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['to_address'] }}</td>
-                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"><span wire:click="viewReport('{{ $value['date'] }}')">View Details</span></td>
+                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"></td>
+                                            
+                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['sr_no'] }}</td>
                                         </tr>
                                     @endforeach
                                 @endif

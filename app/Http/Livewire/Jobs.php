@@ -11,6 +11,7 @@ use App\Models\Customer;
 use App\Models\CustomerLocation;
 use App\Models\AssignJobEmployee;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class Jobs extends Component
 {
@@ -28,6 +29,7 @@ class Jobs extends Component
     {
         $this->jobs = Job::all();
         $this->current_date = date('Y-m-d');
+        
 
         return view('livewire.jobs.list');
     }
@@ -46,6 +48,7 @@ class Jobs extends Component
         
         
         $this->tasks = Task::all();
+        $this->date = Carbon::now()->format('Y-m-d');
         return view('livewire.jobs.create');
     }
 
