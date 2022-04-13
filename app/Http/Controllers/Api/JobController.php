@@ -153,6 +153,7 @@ class JobController extends Controller
        
         $job_status = $request->status;
         $assign_id = $request->job_assign_id;
+       
         
         $jobUpdate = AssignJobEmployee::find($assign_id);
         if(!$jobUpdate){
@@ -163,6 +164,7 @@ class JobController extends Controller
         }
 
         $jobUpdate->job_status = $job_status;
+        $jobUpdate->no_of_visit = $request->visits;
         $jobUpdate->save();
 
         return response()->json([
