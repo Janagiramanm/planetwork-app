@@ -80,7 +80,7 @@
                                     <th class="px-4 py-2">Status</th>   
                                     <th class="px-4 py-2">From</th>
                                     <th class="px-4 py-2">To</th>    
-                                    <th class="px-4 py-2">Travel Time</th>  
+                                    <th class="px-4 py-2">Travel distance</th>  
                                     <th class="px-4 py-2">SR No</th>
                                
                              </tr>
@@ -88,7 +88,7 @@
                                    <tr><td colspan="6" class="text-center">No Result Found</td></tr>
                                 @else
 
-                                       
+                                      
                         
                                     @foreach($result as $key => $value)
                                         <tr>
@@ -97,10 +97,13 @@
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['customer_name'] }} </td>
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['job'] }} </td>
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['status'] }} </td>
-                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['from_address'] }}</td>
-                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['to_address'] }}</td>
-                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"></td>
-                                            
+                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['from_address'] }}
+                                                <br><b><label> Start Time: {{ $value['start'] }}<lable></b>
+                                            </td>
+                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['to_address'] }}
+                                                <br><b><label> End Time: {{ $value['end'] }}<lable></b>
+                                            </td>
+                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['travel'] }}</td>                                            
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['sr_no'] }}</td>
                                         </tr>
                                     @endforeach

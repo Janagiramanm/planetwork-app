@@ -15,6 +15,7 @@ class CreateJobsTable extends Migration
     {
         Schema::create('jobs', function (Blueprint $table) {
             $table->id();
+            $table->string('sr_no')->nullable();
             $table->unsignedBigInteger('customer_id');
             $table->unsignedBigInteger('task_id');
             $table->date('date');

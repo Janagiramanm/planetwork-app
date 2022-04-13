@@ -82,6 +82,10 @@ class Jobs extends Component
             'date' => $this->date           
         ])->id;
 
+        $job = Job::find($job_id);
+        $job->sr_no = 'SR00'.$job_id;
+        $job->save();
+
         foreach($this->user_id as $key => $user_id)
         AssignJobEmployee::create([
                  'job_id' => $job_id,
