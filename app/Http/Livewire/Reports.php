@@ -113,7 +113,7 @@ class Reports extends Component
                  $dateWiseData[$value->date]['date'] = $value->date;
                  $dateWiseData[$value->date]['user_id'] = $value->user_id;
                  $dateWiseData[$value->date]['user_name'] = $value->user->name;
-                 $dateWiseData[$value->date]['customer_name'] = $value->job->customer->first_name;
+                //  $dateWiseData[$value->date]['customer_name'] = $value->job->customer->first_name;
                  $dateWiseData[$value->date]['job'] = $value->job->task->name;
                  $dateWiseData[$value->date]['status'] = $value->job->status;
                  $dateWiseData[$value->date]['sr_no'] = $value->job->sr_no;

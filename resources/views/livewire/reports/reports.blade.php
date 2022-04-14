@@ -93,8 +93,9 @@
                                     @foreach($result as $key => $value)
                                         <tr>
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['date'] }}  </td>
-                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['user_name'] }} </td>
-                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['customer_name'] }} </td>
+                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"><a wire:click="users({{ $user->id }})" href="#">{{ $value['user_name'] }} </a>
+ </td>
+                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"> </td>
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['job'] }} </td>
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['status'] }} </td>
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['from_address'] }}
