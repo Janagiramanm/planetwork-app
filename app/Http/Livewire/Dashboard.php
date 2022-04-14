@@ -52,6 +52,7 @@ class Dashboard extends Component
                 })->get();
 
         $trackIds = [];
+        $users = [];
         if($usersList){
             foreach($usersList as $user){
 
