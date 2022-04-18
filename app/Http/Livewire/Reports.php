@@ -99,6 +99,9 @@ class Reports extends Component
             $travel = 0;
             foreach($result as $key => $value){
 
+                $dateWiseData[$value->date]['customer_name'] = '';
+                $dateWiseData[$value->date]['job'] = '';
+
                 if(isset($result[$i+1]->latitude)){
                     $latitudeOne = $result[$i]->latitude;
                     $longitudeOne = $result[$i]->longitude;
@@ -113,8 +116,10 @@ class Reports extends Component
                  $dateWiseData[$value->date]['date'] = $value->date;
                  $dateWiseData[$value->date]['user_id'] = $value->user_id;
                  $dateWiseData[$value->date]['user_name'] = $value->user->name;
-                //  $dateWiseData[$value->date]['customer_name'] = $value->job->customer->first_name;
-                 $dateWiseData[$value->date]['job'] = $value->job->task->name;
+                 if($value->job_id != 0){
+                    $dateWiseData[$value->date]['customer_name'] = $value->job->customer->first_name;
+                    $dateWiseData[$value->date]['job'] = $value->job->task->name;
+                 }
                  $dateWiseData[$value->date]['status'] = $value->job->status;
                  $dateWiseData[$value->date]['sr_no'] = $value->job->sr_no;
                  $dateWiseData[$value->date]['track'] = $this->getDateWiseData($this->user_id,$value->date,$value->job_id);
