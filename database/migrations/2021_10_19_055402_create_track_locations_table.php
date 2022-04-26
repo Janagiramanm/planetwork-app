@@ -4,6 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+
+
 class CreateTrackLocationsTable extends Migration
 {
     /**
@@ -21,8 +23,10 @@ class CreateTrackLocationsTable extends Migration
             $table->time('time');
             $table->text('latitude');
             $table->text('longitude');
+            $table->text('is_reached');
             $table->integer('status');
-            $table->timestamps();
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });
     }
 

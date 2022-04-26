@@ -66,24 +66,29 @@ class ApiController extends Controller
 
     public function trackLocation(Request $request){
          
-           $data = $request->data;
+           $data = $request->data;  
+           $distance_km = 0.0;
            if($data){
-               foreach($data as $key => $value){
-
-                    $track = new TrackLocations();
-                    $track->user_id = $value['user_id'];
-                    $track->job_id = $value['job_id'];
-                    $track->date = $value['date'];
-                    $track->time = $value['time'];
-                    $track->latitude = $value['lat'];
-                    $track->longitude = $value['lng'];
-                    $track->status = $value['status'];
-                    $track->save();
-               }
-               return [
+             $insert = TrackLocations::insert($data);
+            //    foreach($data as $key => $value){
+            //         $track = new TrackLocations();
+            //         $track->user_id = $value['user_id'];
+            //         $track->job_id = $value['job_id'];
+            //         $track->date = $value['date'];
+            //         $track->time = $value['time'];
+            //         $track->latitude = $value['lat'];
+            //         $track->longitude = $value['lng'];
+            //         $track->status = $value['status'];
+            //         $track->distance_km = $distance_km;
+            //         $track->save();
+            //    }
+            if($insert){
+                return [
                     'status' => 1,
                     'message' => 'Successfully Inserted.'
                ];
+            }
+               
            }
 
            return [

@@ -33,6 +33,7 @@ class Dashboard extends Component
         // $startdate = isset( $this->from_date) ? $this->from_date:$curdate;
         // $enddate = isset($this->to_date) ? $this->to_date:$curdate;
         $user_id = isset($_GET['user_id'])!='' ? $_GET['user_id']:'';
+        $date = isset($_GET['date'])!='' ? $_GET['date']:'';
         // $this->from_date = isset($_GET['from_date']) ? $_GET['from_date']:$curdate;
         // $this->to_date = isset($_GET['to_date']) ? $_GET['to_date']:$curdate;
         // $userCondition = '';
@@ -53,16 +54,20 @@ class Dashboard extends Component
 
         $trackIds = [];
         $users = [];
+        $dateCondition ='';
         if($usersList){
             foreach($usersList as $user){
 
                 $users[$user->id]['name'] = $user->name;
                 $users[$user->id]['lat']  = $user->employeeDetail->latitude ?? 13.02313732; 
                 $users[$user->id]['lng']  = $user->employeeDetail->longitude ?? 77.6471962; 
+                if($date !=''){
+                    $dateCondition = "and date = '".$date."'"; 
+                }
                 $users[$user->id]['location'] = DB::select('SELECT * 
                                         FROM track_locations 
                                         INNER JOIN 
-                                        (SELECT MAX(id) as id FROM track_locations where user_id = '. $user->id .'  and status = 1) last_updates 
+                                        (SELECT MAX(id) as id FROM track_locations where user_id = '. $user->id .'  and status = 1 '.$dateCondition.') last_updates 
                                         ON last_updates.id = track_locations.id');
             }
 

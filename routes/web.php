@@ -58,6 +58,13 @@ Route::get('holidays', Holidays::class)->name('holidays');
 
 Route::get('attendance', Attendance::class)->name('attendance');
 
+Route::get('cron-report', [App\Http\Controllers\CronJobController::class, 'cronWrokReport'])->name('cron-report');
+
+Route::get('/notification', [App\Http\Controllers\NotificationController::class, 'index'])->name('home');
+Route::post('/save-token', [App\Http\Controllers\NotificationController::class, 'saveToken'])->name('save-token');
+Route::post('/send-notification', [App\Http\Controllers\NotificationController::class, 'sendNotification'])->name('send.notification');
+
+
 
 
 

@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\UserRole;
 use App\Models\TrackLocations;
 use App\Models\AssignJobEmployee;
+use App\Models\WorkReport;
 use Carbon\Carbon;
 use DB;
 use DateTime;
@@ -58,6 +59,7 @@ class Reports extends Component
 
     // }
 
+   
     public function generateWorkReport(){
         $this->validate([
             'user_id' => 'required',
@@ -70,8 +72,15 @@ class Reports extends Component
         $this->result = null;
         
 
+        $this->result = WorkReport::where('user_id','=', $this->user_id)
+                  ->whereBetween('date',[$this->from_date, $this->to_date])
+                  ->get();
 
-        $result = TrackLocations::where('user_id','=', $this->user_id)
+        // echo '<pre>';
+        // print_r($result);
+
+
+        /*$result = TrackLocations::where('user_id','=', $this->user_id)
                     ->whereBetween('date',[$this->from_date, $this->to_date])
                     //->select(DB::raw('DATE(date) as date,user_id,job_id'))
                     //->groupBy('date','user_id','job_id')
@@ -80,6 +89,9 @@ class Reports extends Component
         $this->from_date = $this->from_date? $this->from_date : Carbon::now()->format('Y-m-d');
         $this->to_date = $this->to_date? $this->to_date : Carbon::now()->format('Y-m-d'); 
        
+
+        
+
         if($result){
             $dateWiseData = [];
             $i = 0;
@@ -91,7 +103,7 @@ class Reports extends Component
                  $dateWiseData[$value->date]['job'] = '';
                  $dateWiseData[$value->date]['status'] = '';
                  $dateWiseData[$value->date]['sr_no'] = '';
-            //    $dateWiseData[$value->date]['from_address'] = '';
+                 $dateWiseData[$value->date]['from_address'] = '';
                  $dateWiseData[$value->date]['to_address'] = '';
 
                  $dateWiseData[$value->date]['latitude'][] = $value->latitude;
@@ -99,6 +111,7 @@ class Reports extends Component
                  $dateWiseData[$value->date]['date'] = $value->date;
                  $dateWiseData[$value->date]['user_id'] = $value->user_id;
                  $dateWiseData[$value->date]['user_name'] = $value->user->name;
+                 $dateWiseData[$value->date]['travel'] = $totTravel;
                  if($value->job_id != 0){
                     $dateWiseData[$value->date]['customer_name'] = $value->job->customer->first_name;
                     $dateWiseData[$value->date]['job'] = $value->job->task->name;
@@ -112,33 +125,34 @@ class Reports extends Component
                
                 $i++;
             }
+            */
 
-            foreach($dateWiseData as $key => $value){
-                    $cnt = count($value['latitude']);
-                    for($k = 0; $k <= $cnt; $k++ ){
-                        if(isset($value['latitude'][$k+1])){
-                            $travel = $this->calculateDistanceBetweenTwoPoints($value['latitude'][$k], $value['longitude'][$k], $value['latitude'][$k+1], $value['longitude'][$k+1]);
-                            $totTravel += is_nan($travel) ? 0 : $travel;
-                        }
-                    }
+            // foreach($dateWiseData as $key => $value){
+            //         $cnt = count($value['latitude']);
+            //         // for($k = 0; $k <= $cnt; $k++ ){
+            //         //     if(isset($value['latitude'][$k+1])){
+            //         //         $travel = $this->calculateDistanceBetweenTwoPoints($value['latitude'][$k], $value['longitude'][$k], $value['latitude'][$k+1], $value['longitude'][$k+1]);
+            //         //         $totTravel += is_nan($travel) ? 0 : $travel;
+            //         //     }
+            //         // }
                    
-                    $res[$key]['date'] = $value['date'];
-                    $res[$key]['user_id'] = $value['user_id'];
-                    $res[$key]['user_name'] = $value['user_name'];
-                    $res[$key]['customer_name'] =$value['customer_name'];
-                    $res[$key]['job'] = $value['job'];
-                    $res[$key]['status'] = $value['status'];
-                    $res[$key]['sr_no'] = $value['sr_no'];
-                    $res[$key]['travel'] = $totTravel;
-                    $res[$key]['from_address'] = $this->getAddress($value['track'][0]->latitude,$value['track'][0]->longitude);
-                    $res[$key]['to_address'] = $this->getAddress($value['track'][1]->latitude,$value['track'][1]->longitude);
-                    $res[$key]['start'] = $value['start'];
-                    $res[$key]['end'] = $value['end'];
-            }
+            //         $res[$key]['date'] = $value['date'];
+            //         $res[$key]['user_id'] = $value['user_id'];
+            //         $res[$key]['user_name'] = $value['user_name'];
+            //         $res[$key]['customer_name'] =$value['customer_name'];
+            //         $res[$key]['job'] = $value['job'];
+            //         $res[$key]['status'] = $value['status'];
+            //         $res[$key]['sr_no'] = $value['sr_no'];
+            //         $res[$key]['travel'] = $totTravel;
+            //         $res[$key]['from_address'] = $this->getAddress($value['track'][0]->latitude,$value['track'][0]->longitude);
+            //         $res[$key]['to_address'] = $this->getAddress($value['track'][1]->latitude,$value['track'][1]->longitude);
+            //         $res[$key]['start'] = $value['start'];
+            //         $res[$key]['end'] = $value['end'];
+            // }
 
-            $this->result = $res;
+            // $this->result = $dateWiseData;
           
-        }
+        // }
        
     }
 
