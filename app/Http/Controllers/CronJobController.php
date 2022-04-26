@@ -36,6 +36,7 @@ class CronJobController extends Controller
                  $dateWiseData[$value->date]['travel'] = $totTravel;
                  if($value->job_id != 0){
                     $dateWiseData[$value->date]['customer_name'] = $value->job->customer->first_name;
+                    $dateWiseData[$value->date]['job_id'] = $value->job_id;
                     $dateWiseData[$value->date]['job'] = $value->job->task->name;
                     $dateWiseData[$value->date]['status'] = $value->job->status;
                     $dateWiseData[$value->date]['sr_no'] = $value->job->sr_no;
