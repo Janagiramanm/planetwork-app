@@ -66,24 +66,40 @@ class CronJobController extends Controller
                                 
                     if(!$isExist){
                             $workReport = new WorkReport();
+                            $workReport->date = $value['date'];
+                            $workReport->user_id = $value['user_id'];
+                            $workReport->job_id = $value['user_id'];
+                            $workReport->user_name = $value['user_name'];
+                            $workReport->customer_name =$value['customer_name'];
+                            $workReport->job_name = $value['job'];
+                            $workReport->status = $value['status'];
+                            $workReport->sr_no = $value['sr_no'];
+                            $workReport->travel_distance = $totTravel;
+                            $workReport->from_address = $from_address;
+                            $workReport->to_address = $to_address;
+                            $workReport->start = $value['start'];
+                            $workReport->end = $value['end'];
+                            $workReport->save();
+                               
                     }else{
                             $workReport = WorkReport::find($isExist->id);
+                            $workReport->date = $value['date'];
+                            $workReport->user_id = $value['user_id'];
+                            $workReport->job_id = $value['user_id'];
+                            $workReport->user_name = $value['user_name'];
+                            $workReport->customer_name =$value['customer_name'];
+                            $workReport->job_name = $value['job'];
+                            $workReport->status = $value['status'];
+                            $workReport->sr_no = $value['sr_no'];
+                            $workReport->travel_distance = $totTravel;
+                            $workReport->from_address = $from_address;
+                            $workReport->to_address = $to_address;
+                            $workReport->start = $value['start'];
+                            $workReport->end = $value['end'];
+                            $workReport->save();
+                               
                     }
-                    $workReport->date = $value['date'];
-                    $workReport->user_id = $value['user_id'];
-                    $workReport->job_id = $value['user_id'];
-                    $workReport->user_name = $value['user_name'];
-                    $workReport->customer_name =$value['customer_name'];
-                    $workReport->job_name = $value['job'];
-                    $workReport->status = $value['status'];
-                    $workReport->sr_no = $value['sr_no'];
-                    $workReport->travel_distance = $totTravel;
-                    $workReport->from_address = $from_address;
-                    $workReport->to_address = $to_address;
-                    $workReport->start = $value['start'];
-                    $workReport->end = $value['end'];
-                    $workReport->save();
-                       
+                   
             }
             return 'success';
           
