@@ -59,7 +59,7 @@ class CronJobController extends Controller
 
                     $isExist = WorkReport::where('date','=', $date)
                                 ->where('user_id','=', $value['user_id'])
-                                ->where('job_id','=',$value['user_id'])
+                                ->where('job_id','=',$value['job_id'])
                                 ->first();
                     $from_address = $this->getAddress($value['track'][0]->latitude,$value['track'][0]->longitude);
                     $to_address = $this->getAddress($value['track'][1]->latitude,$value['track'][1]->longitude);
