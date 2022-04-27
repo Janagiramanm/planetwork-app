@@ -13,6 +13,8 @@ class CronJobController extends Controller
     public function cronWrokReport(){
 
         $date = Carbon::now()->format('Y-m-d');
+        $date = '2022-04-26';
+
         $result = TrackLocations::where('date',$date)->get();
         if($result){
             $dateWiseData = [];
