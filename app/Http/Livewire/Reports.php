@@ -72,9 +72,38 @@ class Reports extends Component
         $this->result = null;
         
 
-        $this->result = WorkReport::where('user_id','=', $this->user_id)
+        $res = WorkReport::where('user_id','=', $this->user_id)
                   ->whereBetween('date',[$this->from_date, $this->to_date])
                   ->get();
+        
+        $dateWiseData = [];
+        if($res){
+
+            foreach($res as $key => $value){
+                $dateWiseData[$key]['date'] = $value->date;
+                
+                $dateWiseData[$key]['customer_name'] = '';
+                $dateWiseData[$key]['job_name'] = '';
+                $dateWiseData[$key]['status'] = '';
+                $dateWiseData[$key]['sr_no'] = '';
+
+                $dateWiseData[$key]['user_id'] = $value->user_id;
+                $dateWiseData[$key]['user_name'] = $value->user->name;
+                if($value->job_id != 0){
+                    $dateWiseData[$key]['customer_name'] = $value->job->customer->first_name;
+                    $dateWiseData[$key]['job_name'] = $value->job->task->name;
+                    $dateWiseData[$key]['status'] = $value->job->status;
+                    $dateWiseData[$key]['sr_no'] = $value->job->sr_no;
+                }
+                    $dateWiseData[$key]['travel_distance'] = $value->travel_distance;
+                    $dateWiseData[$key]['from_address'] = $this->getAddress($value->from_lat,$value->from_lng);
+                    $dateWiseData[$key]['to_address'] = $this->getAddress($value->to_lat,$value->to_lng);
+                    $dateWiseData[$key]['start'] = $value->start;
+                    $dateWiseData[$key]['end'] = $value->end;
+            }
+
+        }
+        $this->result = $dateWiseData;
 
         // echo '<pre>';
         // print_r($result);

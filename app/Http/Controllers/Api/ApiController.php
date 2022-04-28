@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\TrackLocations;
+use App\Models\WorkReport;
 use DB;
 
 class ApiController extends Controller
@@ -66,28 +67,64 @@ class ApiController extends Controller
 
     public function trackLocation(Request $request){
          
-           $data = $request->data;  
-           $distance_km = 0.0;
+           $data = $request->data;      
+        //    $distance_km = 0.0;
+           $travel = 0 ;
            if($data){
-             $insert = TrackLocations::insert($data);
-            //    foreach($data as $key => $value){
-            //         $track = new TrackLocations();
-            //         $track->user_id = $value['user_id'];
-            //         $track->job_id = $value['job_id'];
-            //         $track->date = $value['date'];
-            //         $track->time = $value['time'];
-            //         $track->latitude = $value['lat'];
-            //         $track->longitude = $value['lng'];
-            //         $track->status = $value['status'];
-            //         $track->distance_km = $distance_km;
-            //         $track->save();
-            //    }
-            if($insert){
+            // $insert = TrackLocations::insert($data);
+               foreach($data as $key => $value){
+                    $track = new TrackLocations();
+                    $track->user_id = $value['user_id'];
+                    $track->job_id = $value['job_id'];
+                    $track->date = $value['date'];
+                    $track->time = $value['time'];
+                    $track->latitude = $value['latitude'];
+                    $track->longitude = $value['longitude'];
+                    $track->status = $value['status'];
+                    $track->is_reached = $value['is_reached'];
+                    // $track->distance_km = $distance_km;
+                    $track->save();
+
+                    $report = WorkReport::where('user_id','=', $value['user_id'])
+                              ->where('job_id','=', $value['job_id'])
+                              ->where('date', '=', $value['date'])
+                              ->first();
+                    if($report){
+                        $distance =  $this->calculateDistanceBetweenTwoPoints($report->to_lat,$report->to_lng,$value['latitude'],$value['longitude']);
+                        $workReport = WorkReport::find($report->id);
+                        $workReport->travel_distance = $report->travel_distance + $distance;
+                        $workReport->to_lat = $value['latitude'];
+                        $workReport->to_lng = $value['longitude'];
+                        $workReport->end = $value['time'];
+                        $workReport->save();
+                    }
+                    if(!$report){
+                            $workReport = new WorkReport();
+                            $workReport->date = $value['date'];
+                            $workReport->user_id = $value['user_id'];
+                            $workReport->job_id = $value['job_id'];
+                            // $workReport->user_name = $value['user_name'];
+                            // $workReport->customer_name =$value['customer_name'];
+                            // $workReport->job_name = $value['job'];
+                            // $workReport->status = $value['status'];
+                            // $workReport->sr_no = $value['sr_no'];
+                            $workReport->travel_distance = $travel;
+                            $workReport->from_lat = $value['latitude'];
+                            $workReport->from_lng = $value['longitude'];
+                            $workReport->to_lat = $value['latitude'];
+                            $workReport->to_lng = $value['longitude'];
+                            $workReport->start = $value['time'];
+                            $workReport->end = $value['time'];
+                            $workReport->save();
+                    }
+
+             }
+            // if($insert){
                 return [
                     'status' => 1,
                     'message' => 'Successfully Inserted.'
                ];
-            }
+            // }
                
            }
 

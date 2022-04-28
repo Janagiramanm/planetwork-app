@@ -87,13 +87,11 @@
                                 @if(!$result)
                                    <tr><td colspan="6" class="text-center">No Result Found</td></tr>
                                 @else
-
-                                      
-                        
+                                    
                                     @foreach($result as $key => $value)
                                         <tr>
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['date'] }}  </td>
-                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"><a wire:click="users({{ $user->id }})" href="#">{{ $value['user_name'] }} </a> </td>  
+                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"><a wire:click="users({{ $value['user_id'] }})" href="#">{{ $value['user_name'] }} </a> </td>  
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"> {{ $value['customer_name'] }}</td>
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['job_name'] }} </td>
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['status'] }} </td>
@@ -104,7 +102,6 @@
                                                 <br><b><label> End Time: {{ $value['end'] }}<lable></b>
                                             </td>
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['travel_distance'] }} km</td>                                            
-                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['sr_no'] }}</td>
                                         </tr>
                                     @endforeach
                                 @endif
