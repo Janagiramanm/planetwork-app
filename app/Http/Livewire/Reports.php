@@ -84,7 +84,7 @@ class Reports extends Component
                 
                 $dateWiseData[$key]['customer_name'] = '';
                 $dateWiseData[$key]['job_name'] = '';
-                $dateWiseData[$key]['status'] = '';
+                $dateWiseData[$key]['job_status'] = '';
                 $dateWiseData[$key]['sr_no'] = '';
 
                 $dateWiseData[$key]['user_id'] = $value->user_id;
@@ -92,7 +92,7 @@ class Reports extends Component
                 if($value->job_id != 0){
                     $dateWiseData[$key]['customer_name'] = $value->job->customer->first_name;
                     $dateWiseData[$key]['job_name'] = $value->job->task->name;
-                    $dateWiseData[$key]['status'] = $value->job->status;
+                    $dateWiseData[$key]['job_status'] = $value->job->employees;
                     $dateWiseData[$key]['sr_no'] = $value->job->sr_no;
                 }
                     $dateWiseData[$key]['travel_distance'] = $value->travel_distance;
