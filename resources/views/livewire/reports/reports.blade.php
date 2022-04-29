@@ -102,7 +102,7 @@
                                                 <br><b><label> End Time: {{ $value['end'] }}<lable></b> 
                                             </td>
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['travel_distance'] }} km</td>  
-                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['sr_no'] }} km</td>                                                                                      
+                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['sr_no'] }}</td>                                                                                      
                                         </tr>
                                     @endforeach
                                 @endif
