@@ -87,14 +87,25 @@
                                 @if(!$result)
                                    <tr><td colspan="6" class="text-center">No Result Found</td></tr>
                                 @else
-                                    
+
                                     @foreach($result as $key => $value)
                                         <tr>
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['date'] }}  </td>
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"><a wire:click="users({{ $value['user_id'] }})" href="#">{{ $value['user_name'] }} </a> </td>  
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"> {{ $value['customer_name'] }}</td>
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['job_name'] }} </td>
-                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['status'] }} </td>
+                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                            @php 
+                                                $status = $value['job_status'];
+                                                    if($status){
+                                                        foreach($status as $emp_status){
+                                                            if($emp_status->user_id == $value['user_id']){
+                                                                echo $emp_status->job_status;
+                                                            }
+                                                        }
+                                                    }
+                                            @endphp 
+                                            </td>
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['from_address'] }}
                                                 <br><b><label> Start Time: {{ $value['start'] }}<lable></b>
                                             </td>
