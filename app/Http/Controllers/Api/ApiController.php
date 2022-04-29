@@ -86,28 +86,47 @@ class ApiController extends Controller
                     $track->save();
 
                     $report = WorkReport::where('user_id','=', $value['user_id'])
-                              ->where('job_id','=', $value['job_id'])
-                              ->where('date', '=', $value['date'])
-                              ->first();
+                                        ->where('date', '=', $value['date'])
+                                        ->orderBy('id','desc')
+                                        ->latest()
+                                        ->first();
+                                        
+                    // echo '<pre>';
+                    // print_r($report);
                     if($report){
                         $distance =  $this->calculateDistanceBetweenTwoPoints($report->to_lat,$report->to_lng,$value['latitude'],$value['longitude']);
-                        $workReport = WorkReport::find($report->id);
-                        $workReport->travel_distance = $report->travel_distance + $distance;
-                        $workReport->to_lat = $value['latitude'];
-                        $workReport->to_lng = $value['longitude'];
-                        $workReport->end = $value['time'];
-                        $workReport->save();
+                        if($report->job_id == $value['job_id']){
+                            $travelDistance = $report->travel_distance + $distance;
+                            $workReport = WorkReport::find($report->id);
+                            $workReport->travel_distance = (float)$travelDistance;
+                            $workReport->to_lat = $value['latitude'];
+                            $workReport->to_lng = $value['longitude'];
+                            $workReport->end = $value['time'];
+                            $workReport->save();
+                        }else{
+                            $workReport = new WorkReport();
+                            $workReport->date = $value['date'];
+                            $workReport->user_id = $value['user_id'];
+                            $workReport->job_id = $value['job_id'];
+                            $workReport->travel_distance = $distance;
+                            $workReport->from_lat = $value['latitude'];
+                            $workReport->from_lng = $value['longitude'];
+                            $workReport->to_lat = $value['latitude'];
+                            $workReport->to_lng = $value['longitude'];
+                            $workReport->start = $value['time'];
+                            $workReport->end = $value['time'];
+                            $workReport->save();
+                        }
+                       
+                    //    echo  $report->travel_distance.'==='.$distance.'+++++'.$report->travel_distance + $distance."<br>";
+                       
+                       
                     }
                     if(!$report){
                             $workReport = new WorkReport();
                             $workReport->date = $value['date'];
                             $workReport->user_id = $value['user_id'];
                             $workReport->job_id = $value['job_id'];
-                            // $workReport->user_name = $value['user_name'];
-                            // $workReport->customer_name =$value['customer_name'];
-                            // $workReport->job_name = $value['job'];
-                            // $workReport->status = $value['status'];
-                            // $workReport->sr_no = $value['sr_no'];
                             $workReport->travel_distance = $travel;
                             $workReport->from_lat = $value['latitude'];
                             $workReport->from_lng = $value['longitude'];
