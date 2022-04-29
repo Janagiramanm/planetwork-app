@@ -198,60 +198,94 @@ class ApiController extends Controller
        $user_id = $request->user_id;
       //     $user_id = 2;
 
-                         
-      $result = DB::table('track_locations')
-      ->select(DB::raw('DATE(date) as date'))
-      ->where('user_id','=', $user_id)
-      ->groupBy('date')
+
+      $res = WorkReport::where('user_id','=', $user_id)
+      ->whereBetween('date',[$from_date, $to_date])
       ->get();
 
+        $dateWiseData = [];
+        if($res){
+
+        foreach($res as $key => $value){
+            $dateWiseData[$key]['date'] = $value->date;
+            
+            $dateWiseData[$key]['customer_name'] = '';
+            $dateWiseData[$key]['job_name'] = '';
+            $dateWiseData[$key]['job_status'] = '';
+            $dateWiseData[$key]['sr_no'] = '';
+
+            $dateWiseData[$key]['user_id'] = $value->user_id;
+            $dateWiseData[$key]['user_name'] = $value->user->name;
+            if($value->job_id != 0){
+                $dateWiseData[$key]['customer_name'] = $value->job->customer->first_name;
+                $dateWiseData[$key]['job_name'] = $value->job->task->name;
+                $dateWiseData[$key]['job_status'] = $value->job->employees;
+                $dateWiseData[$key]['sr_no'] = $value->job->sr_no;
+            }
+                $dateWiseData[$key]['travel_distance'] = $value->travel_distance;
+                $dateWiseData[$key]['from_address'] = $this->getAddress($value->from_lat,$value->from_lng);
+                $dateWiseData[$key]['to_address'] = $this->getAddress($value->to_lat,$value->to_lng);
+                $dateWiseData[$key]['start'] = $value->start;
+                $dateWiseData[$key]['end'] = $value->end;
+        }
+
+        }
+        // $this->result = $dateWiseData;
+
+                         
+    //   $result = DB::table('track_locations')
+    //   ->select(DB::raw('DATE(date) as date'))
+    //   ->where('user_id','=', $user_id)
+    //   ->groupBy('date')
+    //   ->get();
+
      
-      $final_result = [];
-       if($result){
-           $dateWiseData = [];
-           foreach($result as $key => $value){
+    //   $final_result = [];
+    //    if($result){
+    //        $dateWiseData = [];
+    //        foreach($result as $key => $value){
 
-                // $a = TrackLocations::where('user_id', '=', $user_id)
-                //      ->where('date', '=' , $value->date)->orderBy('id','asc')->limit(1);
+    //             // $a = TrackLocations::where('user_id', '=', $user_id)
+    //             //      ->where('date', '=' , $value->date)->orderBy('id','asc')->limit(1);
 
-                // $dateWiseData[$value->date] = TrackLocations::where('user_id', '=', $user_id)
-                //      ->where('date', '=' , $value->date)->orderBy('id','desc')->limit(1)->union($a)->get();
+    //             // $dateWiseData[$value->date] = TrackLocations::where('user_id', '=', $user_id)
+    //             //      ->where('date', '=' , $value->date)->orderBy('id','desc')->limit(1)->union($a)->get();
 
 
-                // $table = DB::table("track_locations")
-                //         ->select('*')->where('date', '=' , $value->date)->orderBy('id','asc')->skip(0)->limit(1);
+    //             // $table = DB::table("track_locations")
+    //             //         ->select('*')->where('date', '=' , $value->date)->orderBy('id','asc')->skip(0)->limit(1);
 
-                // $dateWiseData[$value->date] =       DB::table("track_locations")
-                //         ->select('*')
-                //         ->union($table)
-                //         ->where('date', '=' , $value->date)->orderBy('id','desc')->skip(0)->limit(1)
-                //         ->get();
+    //             // $dateWiseData[$value->date] =       DB::table("track_locations")
+    //             //         ->select('*')
+    //             //         ->union($table)
+    //             //         ->where('date', '=' , $value->date)->orderBy('id','desc')->skip(0)->limit(1)
+    //             //         ->get();
 
-                $dateWiseData[$value->date] =  DB::select('(SELECT * FROM track_locations where user_id = '.$user_id.' and date = "'.$value->date.'" ORDER BY id LIMIT 1)
-                                                            UNION ALL
-                                                            (SELECT * FROM track_locations where user_id = '.$user_id.' and date = "'.$value->date.'" ORDER BY id DESC LIMIT 1)');
-           }
+    //             $dateWiseData[$value->date] =  DB::select('(SELECT * FROM track_locations where user_id = '.$user_id.' and date = "'.$value->date.'" ORDER BY id LIMIT 1)
+    //                                                         UNION ALL
+    //                                                         (SELECT * FROM track_locations where user_id = '.$user_id.' and date = "'.$value->date.'" ORDER BY id DESC LIMIT 1)');
+    //        }
 
-           if(!empty($dateWiseData)){
-               foreach($dateWiseData as $key => $value){
+    //        if(!empty($dateWiseData)){
+    //            foreach($dateWiseData as $key => $value){
 
-                    $final_result[] = [
-                               'date' => $value[0]->date,
-                               'start_time' =>  $value[0]->time,
-                               'end_time' => $value[1]->time,
-                               'from_lat' => $value[0]->latitude,
-                               'from_lng' => $value[0]->longitude,
-                               'to_lat' => $value[1]->latitude,
-                               'to_lng' => $value[1]->longitude,
-                               'distance' => round($this->calculateDistanceBetweenTwoPoints($value[0]->latitude,$value[0]->longitude, $value[1]->latitude, $value[1]->longitude, 'KM'),1)
-                    ];
-               }
-           }
-       }
+    //                 $final_result[] = [
+    //                            'date' => $value[0]->date,
+    //                            'start_time' =>  $value[0]->time,
+    //                            'end_time' => $value[1]->time,
+    //                            'from_lat' => $value[0]->latitude,
+    //                            'from_lng' => $value[0]->longitude,
+    //                            'to_lat' => $value[1]->latitude,
+    //                            'to_lng' => $value[1]->longitude,
+    //                            'distance' => round($this->calculateDistanceBetweenTwoPoints($value[0]->latitude,$value[0]->longitude, $value[1]->latitude, $value[1]->longitude, 'KM'),1)
+    //                 ];
+    //            }
+    //        }
+    //    }
       
       
        
-        if( empty($final_result)){
+        if( empty($dateWiseData)){
             return [
                 'status' => 0,
                 'message' => 'No data found'
@@ -261,9 +295,34 @@ class ApiController extends Controller
        
         return [
             'status' => 1,
-            'data' => $final_result
+            'data' => $dateWiseData
         ];
 
+    }
+
+    public function getAddress($lat,$lng){
+        $url="https://maps.google.com/maps/api/geocode/json?latlng=".$lat.",".$lng."&key=".env('GOOGLEMAPAPI');
+        $curl_return=$this->curl_get($url);
+        $obj=json_decode($curl_return);
+        return $obj->results[0]->formatted_address;
+    }
+    public function curl_get($url,  array $options = array())
+    {
+            $defaults = array(
+                CURLOPT_URL => $url,
+                CURLOPT_HEADER => 0,
+                CURLOPT_RETURNTRANSFER => TRUE,
+                CURLOPT_TIMEOUT => 4
+            );
+
+            $ch = curl_init();
+            curl_setopt_array($ch, ($options + $defaults));
+            if( ! $result = curl_exec($ch))
+            {
+                trigger_error(curl_error($ch));
+            }
+            curl_close($ch);
+            return $result;
     }
 
     public function workReportDetails(Request $request){
