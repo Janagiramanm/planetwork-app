@@ -328,8 +328,40 @@ class ApiController extends Controller
     public function workReportDetails(Request $request){
         $date = $request->date;
         $user_id = $request->user_id;
+
+        $res = WorkReport::where('user_id','=', $user_id)
+        ->where('date',[$date])
+        ->get();
+
+        $dateWiseData = [];
+        if($res){
+            foreach($res as $key => $value){
+                $dateWiseData[$key]['date'] = $value->date;
+                $dateWiseData[$key]['customer_name'] = '';
+                $dateWiseData[$key]['job_name'] = '';
+                $dateWiseData[$key]['job_status'] = '';
+                $dateWiseData[$key]['sr_no'] = '';
+
+                $dateWiseData[$key]['user_id'] = $value->user_id;
+                $dateWiseData[$key]['user_name'] = $value->user->name;
+                if($value->job_id != 0){
+                    $dateWiseData[$key]['customer_name'] = $value->job->customer->first_name;
+                    $dateWiseData[$key]['job_name'] = $value->job->task->name;
+                    $dateWiseData[$key]['job_status'] = $value->job->employees;
+                    $dateWiseData[$key]['sr_no'] = $value->job->sr_no;
+                }
+                    $dateWiseData[$key]['travel_distance'] = $value->travel_distance;
+                    $dateWiseData[$key]['from_address'] = $this->getAddress($value->from_lat,$value->from_lng);
+                    $dateWiseData[$key]['to_address'] = $this->getAddress($value->to_lat,$value->to_lng);
+                    $dateWiseData[$key]['start'] = $value->start;
+                    $dateWiseData[$key]['end'] = $value->end;
+            }
+        }
+        // $this->result = $dateWiseData;
+
+        return $dateWiseData;
        
-        $result  = DB::select('SELECT * 
+      /*  $result  = DB::select('SELECT * 
                                FROM track_locations 
                                INNER JOIN 
                                (SELECT MAX(id) as id,FLOOR(UNIX_TIMESTAMP(time)/(14 * 60)) AS timekey FROM track_locations where  user_id='.$user_id.' and date = "'.$date.'"  GROUP BY timekey) last_updates 
@@ -366,6 +398,7 @@ class ApiController extends Controller
              'pauselocations' => $pause,            
              'ideal_locations' => $ideal
          ];
+         */
  
      }
 
