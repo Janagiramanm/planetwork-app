@@ -344,7 +344,7 @@ class ApiController extends Controller
        // $distance = round($this->point2point_distance($result[0]->latitude,$result[0]->longitude, $result[$count]->latitude, $result[$count]->longitude,'K'), 2);
         $distance = round($this->calculateDistanceBetweenTwoPoints($result[0]->latitude,$result[0]->longitude, $result[$count]->latitude, $result[$count]->longitude, 'KM'),1);
         $ideal_locations = $this->calculateDistanceBetweenTwoPoints($result[0]->latitude,$result[0]->longitude, $result[$count]->latitude, $result[$count]->longitude, 'MT');
-        $$ideal = [];
+        $ideal = [];
         
         if($distance < 20){
              // $ideal[] = $lat2.','.$lng2;
