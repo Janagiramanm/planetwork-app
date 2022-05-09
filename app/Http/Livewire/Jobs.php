@@ -86,12 +86,19 @@ class Jobs extends Component
         $job->sr_no = 'SR00'.$job_id;
         $job->save();
 
-        foreach($this->user_id as $key => $user_id)
-        AssignJobEmployee::create([
-                 'job_id' => $job_id,
-                 'user_id' => $user_id,
-                 
-        ]);
+        foreach($this->user_id as $key => $user_id){
+            AssignJobEmployee::create([
+                    'job_id' => $job_id,
+                    'user_id' => $user_id,
+                    
+            ]);
+
+            $task = Task::find($this->task_id);
+            $task_name = $task->name;
+            $user = User::find($user_id);
+            $this->sendFCM($task_name, $user->fcm_token);
+
+        }
 
         $this->createMode = false;
         $this->resetInput();
@@ -119,6 +126,41 @@ class Jobs extends Component
         $this->date = $job->date;
         $this->address = $job->address;
     }
+
+    function sendFCM($message, $id) {
+
+
+        $url = 'https://fcm.googleapis.com/fcm/send';
+    
+        $fields = array (
+                'registration_ids' => array (
+                        $id
+                ),
+                'notification' => array (
+                        "message" => $message,
+                        "body" => $message,
+                        "tittle" => 'New Task Assigned',
+    
+                )
+        );
+        $fields = json_encode ( $fields );
+    
+        $headers = array (
+                'Authorization: key=' . "AAAA2Wnyh5E:APA91bEx41Qa5J1GrOxFxCMpKB55KqTkVDsJifETp3wAgnb2Kw3OOcEYExda59aovjuNMrEH9FF8riRb0wYp4lfAXxrhaxia6XnBFPtWdrz9FQUr1_pSztCrZ6779uz3r1HvxDkFngjw",
+                'Content-Type: application/json'
+        );
+    
+        $ch = curl_init ();
+        curl_setopt ( $ch, CURLOPT_URL, $url );
+        curl_setopt ( $ch, CURLOPT_POST, true );
+        curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+        curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+        curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+    
+        $result = curl_exec ( $ch );
+        curl_close ( $ch );
+    }
+    
 
 
     public function update(){

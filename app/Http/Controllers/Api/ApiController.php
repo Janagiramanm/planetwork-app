@@ -123,6 +123,7 @@ class ApiController extends Controller
                             if($track->is_reached == 'true'){
                                 $workReport->is_reached = 'true';
                              }
+                            $workReport->from_address =  $this->getAddress( $value['latitude'],$value['longitude']);
                             $workReport->to_address =  $this->getAddress( $value['latitude'],$value['longitude']);
                             $workReport->save();
                         }
