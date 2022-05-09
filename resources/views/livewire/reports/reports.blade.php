@@ -21,7 +21,7 @@
                                     <select id="user_id" wire:model.defer="user_id"   class="block mt-1 w-4/5 p-2  bg-gray-200" name="user_id">
                                     <option value="">Select User</option>
                                     @foreach ($users as $user)
-                                                <option value="{{ $user->user->id }}">
+                                                <option value="{{ $user->user_id }}">
                                                         {{ ucfirst($user->user->name) }}  
                                                 </option>
                                               
@@ -34,7 +34,7 @@
                                 <select id="month" wire:model.defer="month"   class="block mt-1 w-4/5 p-2  bg-gray-200" name="month">
                                     <option value="">Select Month</option>
                                     @foreach ($this->months as $key => $value)
-                                          <option value="{{$key}}">{{ $value }}</option>
+                                          <option value="{{$value}}">{{ $value }}</option>
                                     @endforeach
                                 </select>
                                 <!-- <x-datepicker wire:model.defer="from_date" id="from_date" :error="'from_date'" name="from_date" />

@@ -10,13 +10,14 @@ use App\Models\City;
 use App\Models\EmployeeDetail;
 use App\Models\Api\Leave;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 class Users extends Component
 {
     public $updateMode,$createMode = false;
     public $show = true;
     public $users, $role, $roles, $name, $email, $mobile, $imei, $city, $address,
-           $confirmingItemDeletion, $user_id, $role_id;
+           $confirmingUserDeletion, $user_id, $role_id;
     public $emp_code, $designation, $date_of_join, $basic_pay,
            $hra,$conveyance,$gratuity_pay,$special_allowance,$variable_incentive, $city_id, 
            $emp_detail_id, $latitude, $longitude;
@@ -49,6 +50,7 @@ class Users extends Component
         $this->resetValidation();
         $this->cities = City::all();
         $this->roles = Role::where('name', '!=', 'administrator')->get();
+        $this->date_of_join=Carbon::now()->format('Y-m-d');
         return view('livewire.users.create');
     }
 
@@ -228,16 +230,19 @@ class Users extends Component
     }
 
 
-    public function confirmItemDeletion( $id) 
+    public function confirmingUserDeletion($id) 
     {
         
-        $this->confirmingItemDeletion = $id;
+        $this->confirmingUserDeletion = $id;
     }
  
-    public function deleteItem( Customer $customer) 
+    public function deleteItem( User $user) 
     {
-        $customer->delete();
-        $this->confirmingItemDeletion = false;
-        session()->flash('message', 'Item Deleted Successfully');
+        $user->delete();
+        UserRole::where('user_id','=',$this->confirmingUserDeletion)->delete();
+        $this->confirmingUserDeletion = false;
+        $this->createMode = false;
+        $this->updateMode = false;
+        session()->flash('message', 'User Deleted Successfully');
     }
 }

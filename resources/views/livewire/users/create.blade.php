@@ -87,7 +87,7 @@
             <div class="flex">
                   <div class="md:w-1/2  m-2 mr-3">
                                 <x-jet-label for="date_of_join" value="{{ __('Date of Joining') }}" />
-                                <x-datepicker wire:model.defer="date_of_join" id="date" :error="'date'" name="date_of_join" />
+                                <x-datepicker wire:model.defer="date_of_join" id="date" :error="'date_of_join'" name="date_of_join" />
                                 <br>
                                 @error('date_of_join') <span class="font-mono text-xs text-red-700">{{ $message }}</span> @enderror
                   </div>
@@ -185,11 +185,34 @@
                   <x-jet-button wire:click.prevent="update()" class="bg-orange-500 hover:bg-orange-700 ml-2">
                         Update
                   </x-jet-button>
+                  <x-jet-danger-button wire:click="confirmingUserDeletion( {{ $user_id}})" wire:loading.attr="disabled" class="m-1 w-20">
+                                           Delete
+                   </x-jet-danger-button>
             @endif
            
              
       </form>
-      
+      <!-- Modal -->
+      <x-jet-confirmation-modal wire:model="confirmingUserDeletion">
+                    <x-slot name="title">
+                        {{ __('Delete Item') }}
+                    </x-slot>
+            
+                    <x-slot name="content">
+                        {{ __('Are you sure you want to delete Item? ') }}
+                    </x-slot>
+            
+                    <x-slot name="footer">
+                        <x-jet-secondary-button wire:click="$set('confirmingUserDeletion', false)" wire:loading.attr="disabled">
+                            {{ __('Cancel') }}
+                        </x-jet-secondary-button>
+            
+                        <x-jet-danger-button class="ml-2" wire:click="deleteItem({{ $confirmingUserDeletion }})" wire:loading.attr="disabled">
+                            {{ __('Delete') }}
+                        </x-jet-danger-button>
+                    </x-slot>
+            </x-jet-confirmation-modal>
+       
 
       <style>
             #map{

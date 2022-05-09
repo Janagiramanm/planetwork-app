@@ -23,7 +23,7 @@ class Reports extends Component
     {
 
         $now = Carbon::now();
-        $this->month = $now->month;
+        $this->month =$this->month? $this->month : date('M');
         $this->year = $now->year;
         for($i=1; $i <=3; $i++ ){
              $this->years[] = $this->year+1 - $i;
@@ -32,10 +32,13 @@ class Reports extends Component
     //    print_r($this->years);
     //    exit;
         $this->users = UserRole::where('role_id','=',3)->get();
-        $this->from_date = $this->from_date? $this->from_date : Carbon::now()->format('Y-m-d');
-        $this->to_date = $this->to_date? $this->to_date : Carbon::now()->format('Y-m-d'); 
-        $this->months = ['1'=>'January','2'=>'February','3'=>'March','4'=>'April','5'=>'May',
-        '6'=>'June','7'=>'July','8'=>'August','9'=>'September','10'=>'October','11'=>'November','12'=>'December'];
+        // echo '<pre>';
+        // print_r($this->users);
+        // exit;
+        // $this->from_date = $this->from_date? $this->from_date : Carbon::now()->format('Y-m-d');
+        // $this->to_date = $this->to_date? $this->to_date : Carbon::now()->format('Y-m-d'); 
+        $this->months = ['January','February','March','April','May',
+        'June','July','August','September','October','November','December'];
 
         return view('livewire.reports.reports');
     }
@@ -85,15 +88,23 @@ class Reports extends Component
         $this->reportView =true;
         $this->detailReport = false;
         $this->result = null;
-        
-        $from_date = '01-'.$this->month.'-'.$this->year;
-        $to_date = '31-'.$this->month.'-'.$this->year;
+
+        $month_number = date("m",strtotime($this->month));
+
+        $date = $this->year.'-'.$month_number;
+        // $to_date = $this->year.'-'.$this->month.'-30';
+
+        // echo $from_date.'===='.$to_date;
+        // exit;
 
 
         $res = WorkReport::where('user_id','=', $this->user_id)
-                  ->whereBetween('date',[$from_date, $to_date])
+                  ->where('date','LIKE',$date.'-%')
+                //   ->whereBetween('date',[$from_date, $to_date])
                   ->where('job_id','!=','0')
+                  ->where('is_reached','=','true')
                   ->get();
+        // dd($res);
         
         $dateWiseData = [];
         if($res){
@@ -122,7 +133,7 @@ class Reports extends Component
                     $dateWiseData[$key]['sr_no'] = $value->job->sr_no;
                
                     $dateWiseData[$key]['travel_distance'] = $value->travel_distance;
-                    $dateWiseData[$key]['from_address'] = $this->getAddress($value->from_lat,$value->from_lng);
+                    $dateWiseData[$key]['from_address'] = $value->from_address;
                     $dateWiseData[$key]['to_address'] = $value->job->customerLocation->address;
                     $dateWiseData[$key]['start'] = $value->start;
                     $dateWiseData[$key]['end'] = $value->end;

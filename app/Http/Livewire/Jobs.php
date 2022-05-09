@@ -93,10 +93,10 @@ class Jobs extends Component
                     
             ]);
 
-            $task = Task::find($this->task_id);
-            $task_name = $task->name;
-            $user = User::find($user_id);
-            $this->sendFCM($task_name, $user->fcm_token);
+            // $task = Task::find($this->task_id);
+            // $task_name = $task->name;
+            // $user = User::find($user_id);
+            // $this->sendFCM($task_name, $user->fcm_token);
 
         }
 
@@ -157,7 +157,7 @@ class Jobs extends Component
         curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
         curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
     
-        $result = curl_exec ( $ch );
+        echo $result = curl_exec ( $ch );
         curl_close ( $ch );
     }
     
