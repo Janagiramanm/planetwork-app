@@ -13,16 +13,30 @@ use DateTime;
 
 class Reports extends Component
 {
-    public $user_id, $from_date,$to_date;
-    public $result = [];
-    public $show, $processing, $detailReport = false;
+    public $user_id, $from_date,$to_date, $now, $current_month, $current_year, $month, $year;
+    public $result, $months, $years = [];
+    public $reportShow, $processing, $detailReport, $viewPath, $reportView = false;
     public $status = ['logout','login','pause'];
+    // public $months = ['01'=>'January','02'=>'February','03'=>'March','04'=>'April','05'=>'May',
+    //                   '06'=>'June','07'=>'July','08'=>'August','09'=>'September','10'=>'October','11'=>'November','12'=>'December'];
     public function render()
     {
 
+        $now = Carbon::now();
+        $this->month = $now->month;
+        $this->year = $now->year;
+        for($i=1; $i <=3; $i++ ){
+             $this->years[] = $this->year+1 - $i;
+        }
+    //    echo '<pre>';
+    //    print_r($this->years);
+    //    exit;
         $this->users = UserRole::where('role_id','=',3)->get();
         $this->from_date = $this->from_date? $this->from_date : Carbon::now()->format('Y-m-d');
         $this->to_date = $this->to_date? $this->to_date : Carbon::now()->format('Y-m-d'); 
+        $this->months = ['1'=>'January','2'=>'February','3'=>'March','4'=>'April','5'=>'May',
+        '6'=>'June','7'=>'July','8'=>'August','9'=>'September','10'=>'October','11'=>'November','12'=>'December'];
+
         return view('livewire.reports.reports');
     }
 
@@ -63,29 +77,41 @@ class Reports extends Component
     public function generateWorkReport(){
         $this->validate([
             'user_id' => 'required',
-            'from_date' => 'required',
-            'to_date' => 'required',
+            'month' => 'required',
+            'year' => 'required',
         ]);
 
-        $this->show =true;
+        $this->reportShow =true;
+        $this->reportView =true;
         $this->detailReport = false;
         $this->result = null;
         
+        $from_date = '01-'.$this->month.'-'.$this->year;
+        $to_date = '31-'.$this->month.'-'.$this->year;
+
 
         $res = WorkReport::where('user_id','=', $this->user_id)
-                  ->whereBetween('date',[$this->from_date, $this->to_date])
+                  ->whereBetween('date',[$from_date, $to_date])
+                  ->where('job_id','!=','0')
                   ->get();
         
         $dateWiseData = [];
         if($res){
 
             foreach($res as $key => $value){
-                $dateWiseData[$key]['date'] = $value->date;
+                $dateWiseData[$key]['date'] = Carbon::now()->format('d M Y');
+                
+                // $dateWiseData[$key]['date'] = Carbon::createFromFormat('d/M/Y', $value->date);
                 
                 $dateWiseData[$key]['customer_name'] = '';
                 $dateWiseData[$key]['job_name'] = '';
                 $dateWiseData[$key]['job_status'] = '';
                 $dateWiseData[$key]['sr_no'] = '';
+                $dateWiseData[$key]['from_address'] = '';
+                $dateWiseData[$key]['to_address'] = '';
+                $dateWiseData[$key]['start'] = '';
+                $dateWiseData[$key]['end'] = '';
+                $dateWiseData[$key]['travel_distance'] = '';
 
                 $dateWiseData[$key]['user_id'] = $value->user_id;
                 $dateWiseData[$key]['user_name'] = $value->user->name;
@@ -94,95 +120,17 @@ class Reports extends Component
                     $dateWiseData[$key]['job_name'] = $value->job->task->name;
                     $dateWiseData[$key]['job_status'] = $value->job->employees;
                     $dateWiseData[$key]['sr_no'] = $value->job->sr_no;
-                }
+               
                     $dateWiseData[$key]['travel_distance'] = $value->travel_distance;
                     $dateWiseData[$key]['from_address'] = $this->getAddress($value->from_lat,$value->from_lng);
-                    $dateWiseData[$key]['to_address'] = $this->getAddress($value->to_lat,$value->to_lng);
+                    $dateWiseData[$key]['to_address'] = $value->job->customerLocation->address;
                     $dateWiseData[$key]['start'] = $value->start;
                     $dateWiseData[$key]['end'] = $value->end;
+                }
             }
 
         }
         $this->result = $dateWiseData;
-
-        // echo '<pre>';
-        // print_r($result);
-
-
-        /*$result = TrackLocations::where('user_id','=', $this->user_id)
-                    ->whereBetween('date',[$this->from_date, $this->to_date])
-                    //->select(DB::raw('DATE(date) as date,user_id,job_id'))
-                    //->groupBy('date','user_id','job_id')
-                    ->get();
-
-        $this->from_date = $this->from_date? $this->from_date : Carbon::now()->format('Y-m-d');
-        $this->to_date = $this->to_date? $this->to_date : Carbon::now()->format('Y-m-d'); 
-       
-
-        
-
-        if($result){
-            $dateWiseData = [];
-            $i = 0;
-            $totTravel = 0;
-            $cnt = count($result) -1;
-            foreach($result as $key => $value){
-
-                 $dateWiseData[$value->date]['customer_name'] = '';
-                 $dateWiseData[$value->date]['job'] = '';
-                 $dateWiseData[$value->date]['status'] = '';
-                 $dateWiseData[$value->date]['sr_no'] = '';
-                 $dateWiseData[$value->date]['from_address'] = '';
-                 $dateWiseData[$value->date]['to_address'] = '';
-
-                 $dateWiseData[$value->date]['latitude'][] = $value->latitude;
-                 $dateWiseData[$value->date]['longitude'][] = $value->longitude;
-                 $dateWiseData[$value->date]['date'] = $value->date;
-                 $dateWiseData[$value->date]['user_id'] = $value->user_id;
-                 $dateWiseData[$value->date]['user_name'] = $value->user->name;
-                 $dateWiseData[$value->date]['travel'] = $totTravel;
-                 if($value->job_id != 0){
-                    $dateWiseData[$value->date]['customer_name'] = $value->job->customer->first_name;
-                    $dateWiseData[$value->date]['job'] = $value->job->task->name;
-                    $dateWiseData[$value->date]['status'] = $value->job->status;
-                    $dateWiseData[$value->date]['sr_no'] = $value->job->sr_no;
-                }
-                    $dateWiseData[$value->date]['track'] = $this->getDateWiseData($this->user_id,$value->date,$value->job_id);
-                    $dateWiseData[$value->date]['start'] = $dateWiseData[$value->date]['track'][0]->time;
-                    $dateWiseData[$value->date]['end'] = $dateWiseData[$value->date]['track'][1]->time;
-
-               
-                $i++;
-            }
-            */
-
-            // foreach($dateWiseData as $key => $value){
-            //         $cnt = count($value['latitude']);
-            //         // for($k = 0; $k <= $cnt; $k++ ){
-            //         //     if(isset($value['latitude'][$k+1])){
-            //         //         $travel = $this->calculateDistanceBetweenTwoPoints($value['latitude'][$k], $value['longitude'][$k], $value['latitude'][$k+1], $value['longitude'][$k+1]);
-            //         //         $totTravel += is_nan($travel) ? 0 : $travel;
-            //         //     }
-            //         // }
-                   
-            //         $res[$key]['date'] = $value['date'];
-            //         $res[$key]['user_id'] = $value['user_id'];
-            //         $res[$key]['user_name'] = $value['user_name'];
-            //         $res[$key]['customer_name'] =$value['customer_name'];
-            //         $res[$key]['job'] = $value['job'];
-            //         $res[$key]['status'] = $value['status'];
-            //         $res[$key]['sr_no'] = $value['sr_no'];
-            //         $res[$key]['travel'] = $totTravel;
-            //         $res[$key]['from_address'] = $this->getAddress($value['track'][0]->latitude,$value['track'][0]->longitude);
-            //         $res[$key]['to_address'] = $this->getAddress($value['track'][1]->latitude,$value['track'][1]->longitude);
-            //         $res[$key]['start'] = $value['start'];
-            //         $res[$key]['end'] = $value['end'];
-            // }
-
-            // $this->result = $dateWiseData;
-          
-        // }
-       
     }
 
     public function getDateWiseData($user_id, $date, $job_id){
@@ -278,16 +226,17 @@ class Reports extends Component
 
     public function viewReport($date){
 
-          $this->show = false;
+          $this->reportShow = false;
           $this->detailReport = true;
-         //  echo $date;exit;  
+          $this->reportView =false;
+           echo $date;exit;  
         //   $result  = DB::select('SELECT * 
         //                         FROM track_locations 
         //                         INNER JOIN 
         //                         (SELECT MAX(id) as id,FLOOR(UNIX_TIMESTAMP(time)/(30 * 60)) AS timekey FROM track_locations where date BETWEEN "'.$this->from_date.'" and "'.$this->to_date.'" and user_id='.$this->user_id.'  GROUP BY timekey) last_updates 
         //                         ON last_updates.id = track_locations.id order by track_locations.id asc');
 
-            $details =  TrackLocations::where('user_id','=',$this->user_id)->whereBetween('date',[$date, $date])
+      $details =  TrackLocations::where('user_id','=',$this->user_id)->whereBetween('date',[$date, $date])
             ->get()->sortBy('id');
         
         $status = '';
@@ -307,6 +256,13 @@ class Reports extends Component
                 }
             }
             $this->result = $result;
+    }
+
+    public function viewPath($user_id, $start, $end){
+            echo $user_id;
+            exit;
+            $this->reportShow = false;
+            $this->viewPath = true;
     }
 
     public function backToReports(){

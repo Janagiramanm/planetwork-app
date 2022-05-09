@@ -30,14 +30,24 @@
                                    @error('user_id') <span class="font-mono text-xs text-red-700">{{ $message }}</span> @enderror
                             </div>
                             <div class="w-1/5">
-                                <x-jet-label for="from_date" value="{{ __('From Date') }}" />
-                                <x-datepicker wire:model.defer="from_date" id="from_date" :error="'from_date'" name="from_date" />
-                                @error('from_date') <br>    <span class="font-mono text-xs text-red-700">{{ $message }}</span> @enderror
+                                <x-jet-label for="from_date" value="{{ __('Month') }}" />
+                                <select id="month" wire:model.defer="month"   class="block mt-1 w-4/5 p-2  bg-gray-200" name="month">
+                                    <option value="">Select Month</option>
+                                    @foreach ($this->months as $key => $value)
+                                          <option value="{{$key}}">{{ $value }}</option>
+                                    @endforeach
+                                </select>
+                                <!-- <x-datepicker wire:model.defer="from_date" id="from_date" :error="'from_date'" name="from_date" />
+                                @error('from_date') <br>    <span class="font-mono text-xs text-red-700">{{ $message }}</span> @enderror -->
                             </div>
                             <div class="w-1/5">
-                                <x-jet-label for="to_date" value="{{ __('To Date') }}" />
-                                <x-datepicker wire:model.defer="to_date" id="from_date" :error="'to_date'" name="to_date" />
-                                @error('to_date')<br> <span class="font-mono text-xs text-red-700">{{ $message }}</span> @enderror
+                                <x-jet-label for="to_date" value="{{ __('Year') }}" />
+                                <select id="year" wire:model.defer="year"   class="block mt-1 w-4/5 p-2  bg-gray-200" name="year">
+                                    <option value="">Select Year</option>
+                                    @foreach ($this->years as $key => $year)
+                                          <option value="{{$year}}">{{ $year }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                           
                             <div class="w-1/5">
@@ -65,11 +75,11 @@
                         </div>  
                     </div>
 
-                    @if($detailReport)
+                    @if($viewPath)
+                          @include('livewire.reports.path')
+                    @elseif($detailReport)
                           @include('livewire.reports.detail')
-                    @endif
-                   
-                   @if($show)
+                   @elseif($reportShow)
                     <div wire:loading.remove>
                          <table class="min-w-full leading-normal">
                              <tr>
@@ -112,7 +122,12 @@
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['to_address'] }}
                                                 <br><b><label> End Time: {{ $value['end'] }}<lable></b> 
                                             </td>
-                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['travel_distance'] }} km</td>  
+                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                         <x-jet-button wire:click="viewPath({{$value['user_id']}},{{$value['start']}}, {{$value['end']}})" class="bg-orange-500 hover:bg-orange-700 m-1 w-20">
+                                                         {{ $value['travel_distance'] }}  {{$value['user_id']}} km 
+                                                         </x-jet-button>
+                                                <!-- <button wire:click="viewPath($value['user_id'],$value['start'], $value['end'])" >{{ $value['travel_distance'] }} km </button> -->
+                                            </td>  
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['sr_no'] }}</td>                                                                                      
                                         </tr>
                                     @endforeach
@@ -122,7 +137,7 @@
                     @endif
                
                 
-               
+                
            
                   
          
