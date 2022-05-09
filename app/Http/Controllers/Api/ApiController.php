@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\TrackLocations;
 use App\Models\WorkReport;
+use App\Models\User;
 use DB;
 
 class ApiController extends Controller
@@ -490,6 +491,31 @@ class ApiController extends Controller
                         return $toNauticalMiles;
                       break;
               }
+
+
+    }
+
+    public function updateFcmToken(Request $request){
+
+        $user = User::find($request->user_id);
+        if($user){
+        $user->fcm_token = $request->token;
+        $user->device_model = $request->model;
+        if($user->save()){
+            return [
+                'status' => 1,
+                'message' => "Successully Updated"
+            ];
+        }
+        return [
+            'status' => 0,
+            'message' => "Something went wrong"
+        ];
+    }
+    return [
+        'status' => 0,
+        'message' => "No user found"
+    ];
 
 
     }
