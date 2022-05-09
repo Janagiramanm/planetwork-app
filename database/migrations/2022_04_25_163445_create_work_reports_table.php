@@ -29,6 +29,9 @@ class CreateWorkReportsTable extends Migration
             $table->text('to_lng')->nullable();
             $table->text('start')->nullable();
             $table->text('end')->nullable();
+            $table->text('from_address')->nullable();
+            $table->text('to_address')->nullable();
+            $table->string('is_reached')->default('false');
             $table->text('status')->nullable();
             $table->timestamps();
         });

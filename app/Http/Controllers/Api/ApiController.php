@@ -101,7 +101,11 @@ class ApiController extends Controller
                             $workReport->travel_distance = (float)$travelDistance;
                             $workReport->to_lat = $value['latitude'];
                             $workReport->to_lng = $value['longitude'];
+                            $workReport->to_address =  $this->getAddress( $value['latitude'],$value['longitude']);
                             $workReport->end = $value['time'];
+                            if($track->is_reached == 'true'){
+                               $workReport->is_reached = 'true';
+                            }
                             $workReport->save();
                         }else{
                             $workReport = new WorkReport();
@@ -115,6 +119,10 @@ class ApiController extends Controller
                             $workReport->to_lng = $value['longitude'];
                             $workReport->start = $value['time'];
                             $workReport->end = $value['time'];
+                            if($track->is_reached == 'true'){
+                                $workReport->is_reached = 'true';
+                             }
+                            $workReport->to_address =  $this->getAddress( $value['latitude'],$value['longitude']);
                             $workReport->save();
                         }
                        
@@ -132,6 +140,7 @@ class ApiController extends Controller
                             $workReport->from_lng = $value['longitude'];
                             $workReport->to_lat = $value['latitude'];
                             $workReport->to_lng = $value['longitude'];
+                            $workReport->from_address = $this->getAddress( $value['latitude'],$value['longitude']);
                             $workReport->start = $value['time'];
                             $workReport->end = $value['time'];
                             $workReport->save();
@@ -221,12 +230,12 @@ class ApiController extends Controller
                 $dateWiseData[$key]['job_name'] = $value->job->task->name;
                 $dateWiseData[$key]['job_status'] = $value->job->employees;
                 $dateWiseData[$key]['sr_no'] = $value->job->sr_no;
-            }
                 $dateWiseData[$key]['travel_distance'] = $value->travel_distance;
                 $dateWiseData[$key]['from_address'] = $this->getAddress($value->from_lat,$value->from_lng);
                 $dateWiseData[$key]['to_address'] = $this->getAddress($value->to_lat,$value->to_lng);
                 $dateWiseData[$key]['start'] = $value->start;
                 $dateWiseData[$key]['end'] = $value->end;
+            }
         }
 
         }
