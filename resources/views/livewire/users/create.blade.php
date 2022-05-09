@@ -195,11 +195,11 @@
       <!-- Modal -->
       <x-jet-confirmation-modal wire:model="confirmingUserDeletion">
                     <x-slot name="title">
-                        {{ __('Delete Item') }}
+                        {{ __('Delete User') }}
                     </x-slot>
             
                     <x-slot name="content">
-                        {{ __('Are you sure you want to delete Item? ') }}
+                        {{ __('Are you sure you want to delete User? ') }}
                     </x-slot>
             
                     <x-slot name="footer">
