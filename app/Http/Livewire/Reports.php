@@ -22,21 +22,14 @@ class Reports extends Component
     public function render()
     {
 
+       
         $now = Carbon::now();
         $this->month =$this->month? $this->month : date('M');
         $this->year = $now->year;
         for($i=1; $i <=3; $i++ ){
              $this->years[] = $this->year+1 - $i;
         }
-    //    echo '<pre>';
-    //    print_r($this->years);
-    //    exit;
         $this->users = UserRole::where('role_id','=',3)->get();
-        // echo '<pre>';
-        // print_r($this->users);
-        // exit;
-        // $this->from_date = $this->from_date? $this->from_date : Carbon::now()->format('Y-m-d');
-        // $this->to_date = $this->to_date? $this->to_date : Carbon::now()->format('Y-m-d'); 
         $this->months = ['January','February','March','April','May',
         'June','July','August','September','October','November','December'];
 
@@ -242,7 +235,7 @@ class Reports extends Component
           $this->reportShow = false;
           $this->detailReport = true;
           $this->reportView =false;
-           echo $date;exit;  
+          // echo $date;exit;  
         //   $result  = DB::select('SELECT * 
         //                         FROM track_locations 
         //                         INNER JOIN 
@@ -280,7 +273,7 @@ class Reports extends Component
 
     public function backToReports(){
 
-       
+        $this->reportShow = false;
         return $this->redirect('/reports');
     }
 
