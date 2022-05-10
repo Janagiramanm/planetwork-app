@@ -35,8 +35,15 @@ class Users extends Component
 
     public function render()
     {
-        // $this->createMode = true;    
-        $this->users = User::get();
+        // $this->createMode = true;
+        $user_id = isset($_GET['id'])?$_GET['id']:'';
+        // $this->jobs = Job::all();
+        $user = new User();
+        $this->users =  $user::when($user_id, function($job) use($user_id){
+            if($user_id!=''){
+              return $job->where('id',$user_id);
+            }
+          })->get();    
         $this->cities = City::all();
         $this->roles = Role::where('name', '!=', 'administrator')->get();
      
