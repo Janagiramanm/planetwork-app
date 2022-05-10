@@ -131,6 +131,7 @@ class Reports extends Component
                     $dateWiseData[$key]['job_name'] = $value->job->task->name;
                     $dateWiseData[$key]['job_status'] = $value->job->employees;
                     $dateWiseData[$key]['sr_no'] = $value->job->sr_no;
+                    $dateWiseData[$key]['job_id'] = $value->job_id;
                
                     $dateWiseData[$key]['travel_distance'] = $value->travel_distance;
                     $dateWiseData[$key]['from_address'] = $value->from_address;
