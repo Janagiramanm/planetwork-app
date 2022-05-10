@@ -12,6 +12,7 @@ use App\Models\CustomerLocation;
 use App\Models\AssignJobEmployee;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class Jobs extends Component
 {
@@ -27,7 +28,16 @@ class Jobs extends Component
 
     public function render()
     {
-        $this->jobs = Job::all();
+     
+        $job_id = isset($_GET['id'])?$_GET['id']:'';
+
+        // $this->jobs = Job::all();
+        $job = new Job();
+        $this->jobs =  $job::when($job_id, function($job) use($job_id){
+            if($job_id!=''){
+              return $job->where('id',$job_id);
+            }
+          })->get();
         $this->current_date = date('Y-m-d');
         
 
@@ -93,10 +103,10 @@ class Jobs extends Component
                     
             ]);
 
-            // $task = Task::find($this->task_id);
-            // $task_name = $task->name;
-            // $user = User::find($user_id);
-            // $this->sendFCM($task_name, $user->fcm_token);
+            $task = Task::find($this->task_id);
+            $task_name = $task->name;
+            $user = User::find($user_id);
+            $this->sendFCM($task_name, $user->fcm_token);
 
         }
 
@@ -138,7 +148,7 @@ class Jobs extends Component
                 ),
                 'notification' => array (
                         "message" => $message,
-                        "body" => $message,
+                        "body" => $message.' task has been assigned to you. Please check',
                         "tittle" => 'New Task Assigned',
     
                 )
@@ -157,7 +167,7 @@ class Jobs extends Component
         curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
         curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
     
-        echo $result = curl_exec ( $ch );
+        $result = curl_exec ( $ch );
         curl_close ( $ch );
     }
     

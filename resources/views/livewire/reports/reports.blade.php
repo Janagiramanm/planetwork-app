@@ -128,7 +128,7 @@
                                                          </x-jet-button>
                                                 <!-- <button wire:click="viewPath($value['user_id'],$value['start'], $value['end'])" >{{ $value['travel_distance'] }} km </button> -->
                                             </td>  
-                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['sr_no'] }}</td>                                                                                      
+                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"><a href="/jobs?id={{ $value['job_id'] }}">{{ $value['sr_no'] }}</a></td>                                                                                      
                                         </tr>
                                     @endforeach
                                 @endif
