@@ -101,7 +101,6 @@ class ApiController extends Controller
 
                         if($report->job_id == $value['job_id']){
                             $travelDistance = $report->travel_distance + $distance;
-                            print_r($travelDistance);
                             $workReport = WorkReport::find($report->id);
                             $workReport->travel_distance = (float)$travelDistance;
                             $workReport->to_lat = $value['latitude'];
