@@ -92,6 +92,7 @@
                                     <th class="px-4 py-2">To</th>    
                                     <th class="px-4 py-2">Travel distance</th>  
                                     <th class="px-4 py-2">SR No</th>
+                                    <th class="px-4 py-2">Geofence</th>
                                
                              </tr>
                                 @if(!$result)
@@ -128,7 +129,14 @@
                                                          </x-jet-button>
                                                 <!-- <button wire:click="viewPath($value['user_id'],$value['start'], $value['end'])" >{{ $value['travel_distance'] }} km </button> -->
                                             </td>  
-                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"><a href="/jobs?id={{ $value['job_id'] }}">{{ $value['sr_no'] }}</a></td>                                                                                      
+                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"><a href="/jobs?id={{ $value['job_id'] }}">{{ $value['sr_no'] }}</a></td>   
+                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                @if($value['is_reached'] == 'true')
+                                                    <img width="32" height="32" src="/images/tick_mark.png" />
+                                                @else
+                                                    <img width="32" height="32" src="/images/wrong.png" />
+                                                @endif
+                                          </td>                                                                                                                                                                         
                                         </tr>
                                     @endforeach
                                 @endif

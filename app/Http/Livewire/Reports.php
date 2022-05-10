@@ -102,7 +102,7 @@ class Reports extends Component
                   ->where('date','LIKE',$date.'-%')
                 //   ->whereBetween('date',[$from_date, $to_date])
                   ->where('job_id','!=','0')
-                  ->where('is_reached','=','true')
+                 // ->where('is_reached','=','true')
                   ->get();
         // dd($res);
         
@@ -139,6 +139,7 @@ class Reports extends Component
                     $dateWiseData[$key]['start'] = $value->start;
                     $dateWiseData[$key]['end'] = $value->end;
                 }
+                $dateWiseData[$key]['is_reached'] = $value->is_reached;
             }
 
         }
