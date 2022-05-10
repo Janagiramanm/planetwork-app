@@ -101,8 +101,8 @@
                                     @foreach($result as $key => $value)
                                         <tr>
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['date'] }}  </td>
-                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"><a wire:click="users({{ $value['user_id'] }})" href="#">{{ $value['user_name'] }} </a> </td>  
-                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"> {{ $value['customer_name'] }}</td>
+                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"><a href="/users?id={{ $value['user_id'] }}">{{ $value['user_name'] }}</a> </td>  
+                                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"><a href="/customers?id={{ $value['customer_id'] }}">{{ $value['customer_name'] }}</a> </td>
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ $value['job_name'] }} </td>
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                             @php 
@@ -124,7 +124,7 @@
                                             </td>
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                          <x-jet-button wire:click="viewPath({{$value['user_id']}},{{$value['start']}}, {{$value['end']}})" class="bg-orange-500 hover:bg-orange-700 m-1 w-20">
-                                                         {{ $value['travel_distance'] }}  {{$value['user_id']}} km 
+                                                         {{ $value['travel_distance'] }} km 
                                                          </x-jet-button>
                                                 <!-- <button wire:click="viewPath($value['user_id'],$value['start'], $value['end'])" >{{ $value['travel_distance'] }} km </button> -->
                                             </td>  
