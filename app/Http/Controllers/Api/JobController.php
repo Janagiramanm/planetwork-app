@@ -101,7 +101,8 @@ class JobController extends Controller
                     'longitude' => $value->job->customerLocation->longitude,
                     'city' => $value->job->customerLocation->city->name,
                     'status' => $value->job_status,
-                    'no_of_visit' =>  $value->no_of_visit
+                    'no_of_visit' =>  $value->no_of_visit,
+                    'task_name' => $value->job->task->name
                 ];
         }
         
