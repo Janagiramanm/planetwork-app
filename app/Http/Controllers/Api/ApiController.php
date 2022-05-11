@@ -456,7 +456,7 @@ class ApiController extends Controller
             $attendance = new Attendance();
             $attendance->user_id = $request->user_id;
             $attendance->date = $request->date;
-            $attendance->login = $request->login;
+            $attendance->login = $request->date;
             $attendance->save();
             return [
                 'status' => 1,
@@ -465,12 +465,12 @@ class ApiController extends Controller
         }
         if($type == 'logout'){
             $attendance = Attendance::find($request->login_id);
-            $to = Carbon::createFromFormat('Y-m-d H:s:i', $request->logout);
-            $from = Carbon::createFromFormat('Y-m-d H:s:i', $attendance->login);
-            $diff_in_hours = $to->diffInHours($from);
+            $to = Carbon::createFromFormat('Y-m-d H:i:s', $request->date);
+            $from = Carbon::createFromFormat('Y-m-d H:i:s', $attendance->login);
+            $diff_in_minutes = $to->diffInMinutes($from);
            
-            $attendance->logout = $request->logout;
-            $attendance->hours = $diff_in_hours;
+            $attendance->logout = $request->date;
+            $attendance->minutes = $diff_in_minutes;
             $attendance->save();
             return [
                 'status' => 1,
