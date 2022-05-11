@@ -20,7 +20,7 @@ class CreateAttendancesTable extends Migration
             $table->text('login')->nullable();
             $table->text('logout')->nullable();
             $table->text('minutes')->nullable();
-            $table->timestamps();
+            $table->timestamps(); 
         });
     }
 
