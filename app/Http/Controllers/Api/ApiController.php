@@ -455,7 +455,7 @@ class ApiController extends Controller
         if($type == 'login'){
             $attendance = new Attendance();
             $attendance->user_id = $request->user_id;
-            $attendance->date = $request->date;
+            $attendance->date = date('Y-m-d', strtotime($request->date));
             $attendance->login = $request->date;
             $attendance->save();
             return [

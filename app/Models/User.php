@@ -10,6 +10,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\UserRole;
+use App\Models\Attendance;
 use App\Models\EmployeeDetail;
 
 class User extends Authenticatable
@@ -67,6 +68,11 @@ class User extends Authenticatable
     public function role()
     {
         return $this->hasOne(UserRole::class);
+    }
+
+    public function attendance()
+    {
+        return $this->hasOne(Attendance::class);
     }
     
     public function employeeDetail(){
