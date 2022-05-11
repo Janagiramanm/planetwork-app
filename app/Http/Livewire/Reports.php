@@ -93,7 +93,7 @@ class Reports extends Component
 
         $res = WorkReport::where('user_id','=', $this->user_id)
                   ->where('date','LIKE',$date.'-%')
-                //   ->whereBetween('date',[$from_date, $to_date])
+                //   ->where('date',[$from_date, $to_date])
                   ->where('job_id','!=','0')
                  // ->where('is_reached','=','true')
                   ->get();

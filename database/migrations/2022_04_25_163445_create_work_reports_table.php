@@ -22,7 +22,7 @@ class CreateWorkReportsTable extends Migration
             $table->text('job_name')->nullable();
             $table->text('customer_name')->nullable();
             $table->text('sr_no')->nullable();
-            $table->float('travel_distance');
+            $table->text('travel_distance');
             $table->text('from_lat')->nullable();
             $table->text('from_lng')->nullable();
             $table->text('to_lat')->nullable();

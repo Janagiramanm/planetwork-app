@@ -89,6 +89,7 @@ class ApiController extends Controller
 
                     $report = WorkReport::where('user_id','=', $value['user_id'])
                                         ->where('date', '=', $value['date'])
+                                        // ->where('job_id', '=', $value['job_id'])
                                         ->orderBy('id','desc')
                                         ->latest()
                                         ->first();
