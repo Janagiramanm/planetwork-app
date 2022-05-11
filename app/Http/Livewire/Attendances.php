@@ -33,7 +33,7 @@ class Attendances extends Component
 
 
         $this->result = Attendance::groupBy('user_id','date')
-        ->selectRaw('user_id,date(date),sum(minutes) as minutes')
+        ->selectRaw('user_id,month(date),sum(minutes) as minutes')
         ->where('date','LIKE',$date.'-%')->get();
        
 
