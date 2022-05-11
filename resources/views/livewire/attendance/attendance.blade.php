@@ -30,7 +30,7 @@
                             </div>
                           
                             <div class="w-1/5">
-                                 <x-jet-button  class="bg-orange-500 hover:bg-orange-700  mt-4" wire:click="generateWorkReport()" >
+                                 <x-jet-button  class="bg-orange-500 hover:bg-orange-700  mt-4" wire:click="render()" >
                                         Filter
                                  </x-jet-button>
 
@@ -40,7 +40,10 @@
                             </div>
                             
                     </div>
-            <table class="table-fixed w-full">
+                    @if($detailView)
+                        @include('livewire.attendance.detailView')
+                    @else
+                       <table class="table-fixed w-full">
                             <thead>
                                 <tr class="bg-gray-100">
                                     <th class=" py-2">Name</th>
@@ -52,18 +55,29 @@
                                 </tr>   
                             </thead>
                             <tbody>
-                              @foreach($result as $key => $value)
-                                 <tr>
-                                    <td class="border px-4 py-2">{{ $value->user->name }}</td>
-                                    <td class="border px-4 py-2">{{ $value->minutes }}</td>
-                                    <td class="border px-4 py-2">216</td>
-                                    <td class="border px-4 py-2">--</td>
-                                    <td class="border px-4 py-2"><span>Detail Report</span></td>
-                                 </tr>
-                                @endforeach
-                           
+                             @if(!$result->isEmpty())
+                                 @foreach($result as $key => $value)
+                                        @php  
+                                            $total_hours = 216;
+                                            $actual_hours = $value->minutes / 60 ;
+                                            $ot = $actual_hours - $total_hours ;
+                                            $ot = ($actual_hours > $total_hours) ? '+'.$ot:$ot; 
+
+                                        @endphp 
+                                        <tr>
+                                            <td class="border px-4 py-2">{{ $value->user->name }}</td>
+                                            <td class="border px-4 py-2">{{ $actual_hours }}</td>
+                                            <td class="border px-4 py-2">{{ $total_hours }}</td>
+                                            <td class="border px-4 py-2">{{ $ot }}</td>
+                                            <td class="border px-4 py-2"><a href="#" wire:click="detailView({{ $value->user_id }})">Detail Report</span></td>
+                                        </tr>
+                                 @endforeach
+                                @else
+                                  <tr><td colspan="5">No Records Found</td></tr>
+                                 @endif
                             </tbody>
-            </table>
+                     </table>
+                     @endif
 
 </div>
 </div>
