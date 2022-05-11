@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\TrackLocations;
 use App\Models\WorkReport;
 use App\Models\User;
+use App\Models\Attendance;
+use Carbon\Carbon;
 use DB;
 
 class ApiController extends Controller
@@ -101,7 +103,7 @@ class ApiController extends Controller
                       
 
                         if($report->job_id == $value['job_id']){
-                            $travelDistance = $report->travel_distance + $distance;
+                            $travelDistance = (float)$report->travel_distance + $distance;
                             $workReport = WorkReport::find($report->id);
                             $workReport->travel_distance = (float)$travelDistance;
                             $workReport->to_lat = $value['latitude'];
@@ -444,6 +446,37 @@ class ApiController extends Controller
         'message' => "No user found"
     ];
 
+
+    }
+
+    public function attendance(Request $request){
+        
+        $type = $request->type;
+        if($type == 'login'){
+            $attendance = new Attendance();
+            $attendance->user_id = $request->user_id;
+            $attendance->date = $request->date;
+            $attendance->login = $request->login;
+            $attendance->save();
+            return [
+                'status' => 1,
+                'login_id' => $attendance->id
+            ];
+        }
+        if($type == 'logout'){
+            $attendance = Attendance::find($request->login_id);
+            $to = Carbon::createFromFormat('Y-m-d H:s:i', $request->logout);
+            $from = Carbon::createFromFormat('Y-m-d H:s:i', $attendance->login);
+            $diff_in_hours = $to->diffInHours($from);
+           
+            $attendance->logout = $request->logout;
+            $attendance->hours = $diff_in_hours;
+            $attendance->save();
+            return [
+                'status' => 1,
+                'message' => 'Succesfully logout'
+            ];
+        }
 
     }
 
