@@ -28,7 +28,7 @@
                              @if(!$details->isEmpty())
                                  @foreach($details as $key => $value)
                                           @php 
-                                            
+                                            echo $value->logout.'=='.$value->login.'<br>';
                                            $working_hours =  round(abs(strtotime($value->logout) - strtotime($value->login)) / 60) / 60;
                                           @endphp 
                                         
