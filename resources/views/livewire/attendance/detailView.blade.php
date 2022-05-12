@@ -22,6 +22,9 @@
                                 </tr>   
                             </thead>
                             <tbody>
+                                @php 
+                                $total_hrs = 0 ;
+                                @endphp 
                              @if(!$details->isEmpty())
                                  @foreach($details as $key => $value)
                                           @php 
@@ -36,7 +39,16 @@
                                             <td class="border px-4 py-2">{{ $working_hours }}</td>
                                             <td class="border px-4 py-2"><a href="#" wire:click="detailView()">Detail Report</span></td>
                                         </tr>
+                                        @php 
+                                           $total_hrs += $working_hours;
+                                        @endphp 
                                  @endforeach
+                                  <tr>
+                                      <td></td>
+                                      <td></td>
+                                      <td class="border px-4 py-2">Total Hours</td>
+                                      <td class="border px-4 py-2">{{ $total_hrs  }}</td>
+                                  </tr>
                                 @else
                                   <tr><td colspan="5">No Records Found</td></tr>
                                  @endif
