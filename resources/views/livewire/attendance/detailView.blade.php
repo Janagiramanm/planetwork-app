@@ -28,9 +28,9 @@
                              @if(!$details->isEmpty())
                                  @foreach($details as $key => $value)
                                           @php 
-                                            echo $value->logout.'=='.$value->login.'<br>';
+                                           // echo $value->logout.'=='.$value->login.'<br>';
                                            $value->logout = ($value->logout != '') ? $value->logout : $value->login;
-                                           $working_hours =  round(abs(strtotime($value->logout) - strtotime($value->login)) / 60, 2) / 60;
+                                           $working_hours =  round(round(abs(strtotime($value->logout) - strtotime($value->login)) / 60, 2) / 60,2);
                                           @endphp 
                                         
                                         <tr>
