@@ -49,14 +49,13 @@ class Attendances extends Component
         $date = $this->year.'-'.$month_number;
         $this->employee = User::find($user_id);
 
-        $this->details = Attendance::groupBy('user_id','date')
-        ->selectRaw('user_id,sum(minutes) as minutes, date')
-        ->where('date','LIKE',$date.'-%')->get();
+        // $this->details = Attendance::groupBy('user_id','date')
+        // ->selectRaw('user_id,sum(minutes) as minutes, date')
+        // ->where('date','LIKE',$date.'-%')->get();
 
-        // $this->details = Attendance::where('date','LIKE',$date.'-%')
-        // ->where('user_id','=',$user_id)
-        // ->groupBy('date')
-        // ->get();
+        $this->details = Attendance::where('date','LIKE',$date.'-%')
+        ->where('user_id','=',$user_id)
+        ->get();
 
        
     }

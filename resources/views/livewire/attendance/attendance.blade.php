@@ -59,7 +59,7 @@
                                  @foreach($result as $key => $value)
                                         @php  
                                             $total_hours = 216;
-                                            $actual_hours = $value->minutes / 60 ;
+                                            $actual_hours = round($value->minutes / 60,2) ;
                                             $ot = $actual_hours - $total_hours ;
                                             $ot = ($actual_hours > $total_hours) ? '+'.$ot:$ot; 
 
