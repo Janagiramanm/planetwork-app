@@ -7,11 +7,12 @@ use App\Models\Attendance;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use DB;
 
 class Attendances extends Component
 {
    
-    public $months, $years = [];
+    public $months, $years, $sub = [];
     public $result,$month,$year,$attendance, $details, $employee;
     public $detailView, $attendanceView =false;
 
@@ -53,10 +54,28 @@ class Attendances extends Component
         // ->selectRaw('user_id,sum(minutes) as minutes, date')
         // ->where('date','LIKE',$date.'-%')->get();
 
-        $this->details = Attendance::where('date','LIKE',$date.'-%')
-        ->where('user_id','=',$user_id)
-        ->get();
+        // $this->details = Attendance::where('date','LIKE',$date.'-%')
+        // ->where('user_id','=',$user_id)
+        // ->get();
 
+        // $this->details = Attendance::select(DB::raw('date','min(login) as login', 'max(logout) as logout', 'sum(minutes) as minutes'))
+        //  ->where('user_id','=',$user_id)
+        //  ->groupBy('date')
+        //  ->get();
+
+         $this->details =  DB::select("select user_id,date,min(login) as login,max(logout) as logout,sum(minutes) as minutes FROM `attendances` GROUP BY date,user_id");
+
+      
+
+        //  $sub = Attendance::select('date', DB::raw('MAX(login) as start_date'))
+        //  ->where('user_id','=',$user_id)
+        //  ->groupBy('date');
+
+        // $this->details =  Attendance::join(DB::raw("($sub->toSql) max_table", function($join){
+        //     $join->on('max_table.date','=', 'synopses.date')
+        //     ->on('max_table.start_date', '=', 'synopses.login');
+        // }))
+        // ->addBindings($sub->getBindings(),'join');
        
     }
 }

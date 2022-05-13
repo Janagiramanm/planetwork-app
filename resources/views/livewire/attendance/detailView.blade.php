@@ -24,8 +24,9 @@
                             <tbody>
                                 @php 
                                 $total_hrs = 0 ;
+                                  
                                 @endphp 
-                             @if(!$details->isEmpty())
+                             @if($details)
                                  @foreach($details as $key => $value)
                                           @php 
                                            // echo $value->logout.'=='.$value->login.'<br>';
