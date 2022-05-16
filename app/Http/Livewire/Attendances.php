@@ -79,10 +79,9 @@ class Attendances extends Component
     }
 
     public function getTotalWorkingHoursMonth(){
-        $month_no = array_keys($this->months,$this->month);
-        $no = ($month_no[0]+1 < 10 ) ? '0'.$month_no[0]+1 : $month_no[0]+1 ;
+        $month_number = date("m",strtotime($this->month));
         $holiday = Holiday::where('date','=',date('Y-m-d',strtotime($date)))->first();
-        $totalDays = Carbon::now()->month($no)->daysInMonth;
+        $totalDays = Carbon::now()->month($month_number)->daysInMonth;
 
     }
     public function getNumberOfDays(){
