@@ -29,7 +29,7 @@
                                    </select>
                                    @error('user_id') <span class="font-mono text-xs text-red-700">{{ $message }}</span> @enderror
                             </div>
-                            <div class="w-1/5">
+                            <div class="w-1/6">
                                 <x-jet-label for="from_date" value="{{ __('Month') }}" />
                                 <select id="month" wire:model.defer="month"   class="block mt-1 w-4/5 p-2  bg-gray-200" name="month">
                                     <option value="">Select Month</option>
@@ -40,7 +40,7 @@
                                 <!-- <x-datepicker wire:model.defer="from_date" id="from_date" :error="'from_date'" name="from_date" />
                                 @error('from_date') <br>    <span class="font-mono text-xs text-red-700">{{ $message }}</span> @enderror -->
                             </div>
-                            <div class="w-1/5">
+                            <div class="w-1/6">
                                 <x-jet-label for="to_date" value="{{ __('Year') }}" />
                                 <select id="year" wire:model.defer="year"   class="block mt-1 w-4/5 p-2  bg-gray-200" name="year">
                                     <option value="">Select Year</option>
@@ -48,6 +48,12 @@
                                           <option value="{{$year}}">{{ $year }}</option>
                                     @endforeach
                                 </select>
+                            </div>
+                          
+                            <div class="w-1/5">
+                                <x-jet-label for="to_date" value="{{ __('Search') }}" />
+                                <input type="text" name="title" value="" class="mt-1" />
+                              
                             </div>
                           
                             <div class="w-1/5">

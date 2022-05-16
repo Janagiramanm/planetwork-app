@@ -32,7 +32,7 @@ class Attendances extends Component
         $month_number = date("m",strtotime($this->month));
         $date = $this->year.'-'.$month_number;
         $month_no = array_keys($this->months,$this->month);
-        $this->total_days = ($month_no[0]+1 < 10 ) ? '0'.$month_no[0]+1 : $month_no[0]+1 ;
+        $this->total_days = $month_number ;
         $this->total_hours = $this->total_days * 9;
 
         $this->result = Attendance::groupBy('user_id')

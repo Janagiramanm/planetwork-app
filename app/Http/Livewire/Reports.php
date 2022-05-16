@@ -85,11 +85,7 @@ class Reports extends Component
         $month_number = date("m",strtotime($this->month));
 
         $date = $this->year.'-'.$month_number;
-        // $to_date = $this->year.'-'.$this->month.'-30';
-
-        // echo $from_date.'===='.$to_date;
-        // exit;
-
+        
 
         $res = WorkReport::where('user_id','=', $this->user_id)
                   ->where('date','LIKE',$date.'-%')
@@ -97,7 +93,7 @@ class Reports extends Component
                   ->where('job_id','!=','0')
                  // ->where('is_reached','=','true')
                   ->get();
-        // dd($res);
+       
         
         $dateWiseData = [];
         if($res){
@@ -119,7 +115,7 @@ class Reports extends Component
 
                 $dateWiseData[$key]['user_id'] = $value->user_id;
                 $dateWiseData[$key]['user_name'] = $value->user->name;
-                if($value->job_id != 0){
+                if($value->job_id != 0 ){
                     $dateWiseData[$key]['customer_name'] = $value->job->customer->first_name;
                     $dateWiseData[$key]['job_name'] = $value->job->task->name;
                     $dateWiseData[$key]['job_status'] = $value->job->employees;

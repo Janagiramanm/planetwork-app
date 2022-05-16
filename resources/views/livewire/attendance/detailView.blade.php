@@ -50,7 +50,7 @@
                                                             <td class="border px-4 py-2">{{ date('H:i',strtotime($value->login)) }}</td>
                                                             <td class="border px-4 py-2">{{  date('H:i',strtotime($value->logout)) }}</td>
                                                             <td class="border px-4 py-2">{{ $working_hours }}</td>
-                                                            <td class="border px-4 py-2"><a href="#" wire:click="detailView()">Detail Report</span></td>
+                                                            <td class="border px-4 py-2"><a href="#" wire:click="detailView()">View Map</span></td>
                                                         </tr>
                                                         @php 
                                                          $total_hrs += $working_hours;
