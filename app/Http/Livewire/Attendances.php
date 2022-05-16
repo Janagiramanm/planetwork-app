@@ -84,10 +84,10 @@ class Attendances extends Component
         $totalDays = Carbon::now()->month($month_number)->daysInMonth;
 
     }
-    public function getNumberOfDays(){
+    // public function getNumberOfDays(){
 
-        $month_no = array_keys($this->months,$this->month);
-        $no = ($month_no[0]+1 < 10 ) ? '0'.$month_no[0]+1 : $month_no[0]+1 ;
-        $this->monthDays = Carbon::now()->month($no)->daysInMonth;
-    }
+    //     $month_no = array_keys($this->months,$this->month);
+    //     $no = ($month_no[0]+1 < 10 ) ? '0'.$month_no[0]+1 : $month_no[0]+1 ;
+    //     $this->monthDays = Carbon::now()->month($no)->daysInMonth;
+    // }
 }
