@@ -8,6 +8,7 @@ use App\Models\TrackLocations;
 use App\Models\WorkReport;
 use App\Models\User;
 use App\Models\Attendance;
+use App\Models\Holiday;
 use Carbon\Carbon;
 use DB;
 
@@ -480,5 +481,74 @@ class ApiController extends Controller
 
     }
 
+    public function attendanceReport(Request $request){
+
+        $user_id = $request->user_id;
+        $month = $request->month;
+        $year = $request->year;
+
+        $date = $year.'-'.$month;
+       
+        $attendance = Attendance::groupBy('user_id')
+        ->selectRaw('user_id,sum(minutes) as minutes')
+        ->where('date','LIKE',$date.'-%')->first();
+        // if(!$attendance){
+        //       return = [
+        //           'status'=>'0',
+        //           'message' => 'No records found'
+        //       ];
+        // }
+
+        $details =  DB::select("select user_id,date,min(login) as login,max(logout) as logout,sum(minutes) as minutes 
+        FROM `attendances` where user_id = $user_id and date LIKE '$date%' GROUP BY date,user_id");
+
+        
+        $monthDays = Carbon::now()->month($month)->daysInMonth;
+        $result =[
+            'status' => '1',
+            'actual_hours' => $attendance->minutes,
+            'total_hours' => '219',
+            
+        ];
+        
+        for($i=1; $i <= $monthDays; $i++){
+             $date = $i.'-'.$month.'-'.$year;
+             $day = Carbon::createFromFormat('d-m-Y', $i.'-'.$month.'-'.$year)->format('l');
+             $holiday = Holiday::where('date','=',date('Y-m-d',strtotime($date)))->first();
+             $login = '--';
+             $logout = '--';
+             $actual_hours = '--';
+             foreach($details as $key => $value){
+                 if($date == date('d-m-Y',strtotime($value->date))){
+                     $login = date('H:i',strtotime($value->login));
+                     $logout = date('H:i',strtotime($value->logout));
+                     $actual_hours = $value->minutes;
+                 }
+             }
+            $result['report'][]  = [
+                        'date'=> $date,
+                        'day'=> $day,
+                        'login' => $login,
+                        'logout' => $logout,
+                        'working_hours' => $actual_hours,
+                        'is_holiday' => $holiday ? 'true' : 'false',
+                        'holiday_title' => $holiday ? $holiday->description : 'false',
+                        'is_weekend' => ($day == 'Sunday') ? 'true':'false', 
+                        'is_leave' => 'false'
+             ];
+           
+             
+        }
+        return $result;
+       
+    }
+
+    public function getTotalWorkingHoursMonth(){
+        $month_no = array_keys($this->months,$this->month);
+        $no = ($month_no[0]+1 < 10 ) ? '0'.$month_no[0]+1 : $month_no[0]+1 ;
+        $holiday = Holiday::where('date','=',date('Y-m-d',strtotime($date)))->first();
+        $totalDays = Carbon::now()->month($no)->daysInMonth;
+
+    }
 
 }

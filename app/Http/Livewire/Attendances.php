@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Models\Attendance;
 use App\Models\User;
+use App\Models\Holiday;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use DB;
@@ -12,8 +13,9 @@ use DB;
 class Attendances extends Component
 {
    
-    public $months, $years, $sub = [];
-    public $result,$month,$year,$attendance, $details, $employee;
+    public $months, $years, $sub, $monthInDays = [];
+    public $result,$month,$year,$attendance, $details, $employee,
+           $monthDays, $month_no, $total_days, $total_hours;
     public $detailView, $attendanceView =false;
 
     public function render()
@@ -29,6 +31,9 @@ class Attendances extends Component
         }
         $month_number = date("m",strtotime($this->month));
         $date = $this->year.'-'.$month_number;
+        $month_no = array_keys($this->months,$this->month);
+        $this->total_days = ($month_no[0]+1 < 10 ) ? '0'.$month_no[0]+1 : $month_no[0]+1 ;
+        $this->total_hours = $this->total_days * 9;
 
         $this->result = Attendance::groupBy('user_id')
         ->selectRaw('user_id,sum(minutes) as minutes')
@@ -46,36 +51,46 @@ class Attendances extends Component
 
         $this->detailView = true;
 
-        $month_number = date("m",strtotime($this->month));
-        $date = $this->year.'-'.$month_number;
-        $this->employee = User::find($user_id);
-
-        // $this->details = Attendance::groupBy('user_id','date')
-        // ->selectRaw('user_id,sum(minutes) as minutes, date')
-        // ->where('date','LIKE',$date.'-%')->get();
-
-        // $this->details = Attendance::where('date','LIKE',$date.'-%')
-        // ->where('user_id','=',$user_id)
-        // ->get();
-
-        // $this->details = Attendance::select(DB::raw('date','min(login) as login', 'max(logout) as logout', 'sum(minutes) as minutes'))
-        //  ->where('user_id','=',$user_id)
-        //  ->groupBy('date')
-        //  ->get();
-
-         $this->details =  DB::select("select user_id,date,min(login) as login,max(logout) as logout,sum(minutes) as minutes FROM `attendances` GROUP BY date,user_id");
-
-      
-
-        //  $sub = Attendance::select('date', DB::raw('MAX(login) as start_date'))
-        //  ->where('user_id','=',$user_id)
-        //  ->groupBy('date');
-
-        // $this->details =  Attendance::join(DB::raw("($sub->toSql) max_table", function($join){
-        //     $join->on('max_table.date','=', 'synopses.date')
-        //     ->on('max_table.start_date', '=', 'synopses.login');
-        // }))
-        // ->addBindings($sub->getBindings(),'join');
+        $month_no = array_keys($this->months,$this->month);
+        $no = ($month_no[0]+1 < 10 ) ? '0'.$month_no[0]+1 : $month_no[0]+1 ;
+        $this->monthDays = Carbon::now()->month($no)->daysInMonth;
        
+        $date_val = $this->year.'-'.$no;
+        $this->employee = User::find($user_id);
+        for($i=1; $i <= $this->monthDays; $i++){
+             $date = $i.'-'.$no.'-'.$this->year;
+             $day = Carbon::createFromFormat('d-m-Y', $i.'-'.$no.'-'.$this->year)->format('l');
+             $holiday = Holiday::where('date','=',date('Y-m-d',strtotime($date)))->first();
+            
+             $color = ($day == 'Sunday') ? "red" : (($holiday) ? "blue" : "white");
+             $this->monthInDays[]  = [
+                          'date'=> $date,
+                          'day'=> $day,
+                          'color' => $color,
+                          'holiday' => $holiday ? $holiday->description : '' 
+            ];
+            //$this->monthInDays[]  = Carbon::createFromFormat('d-m-Y', $i.'-'.$no.'-'.$this->year)->format('l'); 
+
+        }
+        // echo "select user_id,date,min(login) as login,max(logout) as logout,sum(minutes) as minutes 
+        // FROM `attendances` where user_id = $user_id and date LIKE '$date_val%' GROUP BY date,user_id";
+
+         $this->details =  DB::select("select user_id,date,min(login) as login,max(logout) as logout,sum(minutes) as minutes 
+                              FROM `attendances` where user_id = $user_id and date LIKE '$date_val%' GROUP BY date,user_id");
+
+    }
+
+    public function getTotalWorkingHoursMonth(){
+        $month_no = array_keys($this->months,$this->month);
+        $no = ($month_no[0]+1 < 10 ) ? '0'.$month_no[0]+1 : $month_no[0]+1 ;
+        $holiday = Holiday::where('date','=',date('Y-m-d',strtotime($date)))->first();
+        $totalDays = Carbon::now()->month($no)->daysInMonth;
+
+    }
+    public function getNumberOfDays(){
+
+        $month_no = array_keys($this->months,$this->month);
+        $no = ($month_no[0]+1 < 10 ) ? '0'.$month_no[0]+1 : $month_no[0]+1 ;
+        $this->monthDays = Carbon::now()->month($no)->daysInMonth;
     }
 }

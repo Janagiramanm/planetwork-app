@@ -53,6 +53,7 @@ Route::middleware('auth:sanctum')->group( function () {
 
     Route::post('update-fcm-token', 'App\Http\Controllers\Api\ApiController@updateFcmToken')->name('update-fcm-token');
     Route::post('attendance', 'App\Http\Controllers\Api\ApiController@attendance')->name('attendance');
+    Route::post('attendance-report', 'App\Http\Controllers\Api\ApiController@attendanceReport')->name('attendance-report');
 
     //Route::post('/leaves',LeaveController::class, 'leaves')->name('leaves');
     //Route::resource('', LeaveController::class);

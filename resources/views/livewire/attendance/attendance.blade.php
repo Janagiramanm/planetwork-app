@@ -49,7 +49,7 @@
                                     <th class=" py-2">Name</th>
                                     <th class=" py-2">Actual Hours</th>                                   
                                     <th class=" py-2">Total Hours</th>
-                                    <th class=" py-2">Over Time</th>
+                                    <th class=" py-2">Over / Less Time ( Hours )</th>
                                     <th class=" py-2">Details</th>
                                     
                                 </tr>   
@@ -58,7 +58,7 @@
                              @if(!$result->isEmpty())
                                  @foreach($result as $key => $value)
                                         @php  
-                                            $total_hours = 216;
+                                            $total_hours = $total_hours;
                                             $actual_hours = round($value->minutes / 60,2) ;
                                             $ot = $actual_hours - $total_hours ;
                                             $ot = ($actual_hours > $total_hours) ? '+'.$ot:$ot; 
