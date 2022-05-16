@@ -54,7 +54,7 @@ class Attendances extends Component
         $month_no = array_keys($this->months,$this->month);
         echo '<pre>';
         print_r($month_no);
-       echo 'NOO=='. $no = ($month_no[0]+1 < 10 ) ? '0'.$month_no[0]+1 : $month_no[0]+1 ;
+       echo 'NOO=='. $no = `($month_no[0]+1 < 10 ) ? '0'.$month_no[0]+1 : $month_no[0]+1` ;
         $this->monthDays = Carbon::now()->month($no)->daysInMonth;
        
         $date_val = $this->year.'-'.$no;
