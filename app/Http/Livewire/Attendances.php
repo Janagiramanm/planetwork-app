@@ -52,7 +52,7 @@ class Attendances extends Component
         $this->detailView = true;
 
         $month_no = array_keys($this->months,$this->month);
-        $no = ($month_no[0]+1 < 10 ) ? '0'.$month_no[0]+1 : $month_no[0]+1 ;
+       echo 'NOO=='. $no = ($month_no[0]+1 < 10 ) ? '0'.$month_no[0]+1 : $month_no[0]+1 ;
         $this->monthDays = Carbon::now()->month($no)->daysInMonth;
        
         $date_val = $this->year.'-'.$no;
@@ -73,7 +73,7 @@ class Attendances extends Component
         }
         echo "select user_id,date,min(login) as login,max(logout) as logout,sum(minutes) as minutes 
         FROM `attendances` where user_id = $user_id and date LIKE '$date_val%' GROUP BY date,user_id";
-        
+
         $this->details =  DB::select("select user_id,date,min(login) as login,max(logout) as logout,sum(minutes) as minutes 
                               FROM `attendances` where user_id = $user_id and date LIKE '$date_val%' GROUP BY date,user_id");
 
