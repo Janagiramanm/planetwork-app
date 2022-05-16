@@ -47,7 +47,11 @@
                                            @endforeach
 
                                     </td>
+                                    @if($job->customer->customer_type == 'BUSINESS' )
                                     <td class="border px-4 py-2">{{ $job->customer->company_name }}</td>
+                                    @else
+                                    <td class="border px-4 py-2">{{ $job->customer->first_name }} {{ $job->customer->last_name }}</td>
+                                    @endif
                                     <td class="border px-4 py-2">{{ $job->task->name }}</td>
                                     <td class="border px-4 py-2">{{ $job->customerLocation->address }}</td>
                                    
