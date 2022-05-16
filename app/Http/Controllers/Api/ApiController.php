@@ -515,9 +515,9 @@ class ApiController extends Controller
              $date = $i.'-'.$month.'-'.$year;
              $day = Carbon::createFromFormat('d-m-Y', $i.'-'.$month.'-'.$year)->format('l');
              $holiday = Holiday::where('date','=',date('Y-m-d',strtotime($date)))->first();
-             $login = '--';
-             $logout = '--';
-             $actual_hours = '--';
+             $login = '0';
+             $logout = '0';
+             $actual_hours = '0';
              foreach($details as $key => $value){
                  if($date == date('d-m-Y',strtotime($value->date))){
                      $login = date('H:i',strtotime($value->login));

@@ -51,17 +51,14 @@ class Attendances extends Component
 
         $this->detailView = true;
 
-        $month_no = array_keys($this->months,$this->month);
-        echo '<pre>';
-        print_r($month_no);
-       echo 'NOO=='. $no = `($month_no[0]+1 < 10 ) ? '0'.$month_no[0]+1 : $month_no[0]+1` ;
-        $this->monthDays = Carbon::now()->month($no)->daysInMonth;
+        $month_no = date('m',strtotime('01-'.$this->month.'-'.$this->year));
+        $this->monthDays = Carbon::now()->month($month_no)->daysInMonth;
        
-        $date_val = $this->year.'-'.$no;
+        $date_val = $this->year.'-'.$month_no;
         $this->employee = User::find($user_id);
         for($i=1; $i <= $this->monthDays; $i++){
-             $date = $i.'-'.$no.'-'.$this->year;
-             $day = Carbon::createFromFormat('d-m-Y', $i.'-'.$no.'-'.$this->year)->format('l');
+             $date = $i.'-'.$month_no.'-'.$this->year;
+             $day = Carbon::createFromFormat('d-m-Y', $i.'-'.$month_no.'-'.$this->year)->format('l');
              $holiday = Holiday::where('date','=',date('Y-m-d',strtotime($date)))->first();
             
              $color = ($day == 'Sunday') ? "red" : (($holiday) ? "blue" : "white");
@@ -73,8 +70,8 @@ class Attendances extends Component
             ];
            
         }
-        echo "select user_id,date,min(login) as login,max(logout) as logout,sum(minutes) as minutes 
-        FROM `attendances` where user_id = $user_id and date LIKE '$date_val%' GROUP BY date,user_id";
+        // echo "select user_id,date,min(login) as login,max(logout) as logout,sum(minutes) as minutes 
+        // FROM `attendances` where user_id = $user_id and date LIKE '$date_val%' GROUP BY date,user_id";
 
         $this->details =  DB::select("select user_id,date,min(login) as login,max(logout) as logout,sum(minutes) as minutes 
                               FROM `attendances` where user_id = $user_id and date LIKE '$date_val%' GROUP BY date,user_id");
