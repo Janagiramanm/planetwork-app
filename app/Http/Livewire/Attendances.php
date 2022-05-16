@@ -69,13 +69,12 @@ class Attendances extends Component
                           'color' => $color,
                           'holiday' => $holiday ? $holiday->description : '' 
             ];
-            //$this->monthInDays[]  = Carbon::createFromFormat('d-m-Y', $i.'-'.$no.'-'.$this->year)->format('l'); 
-
+           
         }
-        // echo "select user_id,date,min(login) as login,max(logout) as logout,sum(minutes) as minutes 
-        // FROM `attendances` where user_id = $user_id and date LIKE '$date_val%' GROUP BY date,user_id";
-
-         $this->details =  DB::select("select user_id,date,min(login) as login,max(logout) as logout,sum(minutes) as minutes 
+        echo "select user_id,date,min(login) as login,max(logout) as logout,sum(minutes) as minutes 
+        FROM `attendances` where user_id = $user_id and date LIKE '$date_val%' GROUP BY date,user_id";
+        
+        $this->details =  DB::select("select user_id,date,min(login) as login,max(logout) as logout,sum(minutes) as minutes 
                               FROM `attendances` where user_id = $user_id and date LIKE '$date_val%' GROUP BY date,user_id");
 
     }
