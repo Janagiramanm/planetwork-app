@@ -45,7 +45,7 @@
                                                             $hours = $value->minutes / 60;
                                                             $minute = $value->minutes % 60;
                                                             $working_hours_display = $hours.' h ' .$minute.' m';
-                                                            $working_hours = $hours.'.'.$minute;
+                                                            $working_hours = $hours;
 
                                                         }
                                                             $default = 'no';
