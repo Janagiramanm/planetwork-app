@@ -105,6 +105,9 @@ class Reports extends Component
         
         $dateWiseData = [];
         if($res){
+            echo '<pre>';
+            print_r($res);
+            exit;
 
             foreach($res as $key => $value){
                 $dateWiseData[$key]['date'] = date('d M Y',strtotime($value['created_at']));
