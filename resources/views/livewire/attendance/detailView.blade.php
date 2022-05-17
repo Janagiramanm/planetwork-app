@@ -60,7 +60,7 @@
                                                             <td class="border px-4 py-2"><a href="#" wire:click="detailView()">View Map</span></td>
                                                         </tr>
                                                         @php 
-                                                         $total_hrs += $working_hours;
+                                                         $total_hrs += (float)$working_hours;
                                                         }
                                                        
                                                         @endphp 
