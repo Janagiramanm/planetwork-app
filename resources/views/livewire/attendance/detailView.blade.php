@@ -26,7 +26,8 @@
                                
                              @if($details)
                                 @php 
-                                    $total_hrs = 0 ;
+                                    $hrs = 0 ;
+                                    $mints = 0 ;
                                   $i=0;
                                 @endphp 
                                    @foreach($monthInDays as $key1 => $value1)
@@ -42,9 +43,9 @@
                                                         $value->logout = ($value->logout != '') ? date('H:i',strtotime($value->logout)) : '--';
                                                         $working_hours = '0';
                                                         if($value->minutes !=''){
-                                                            $hours = $value->minutes / 60;
+                                                            $hours = intdiv($value->minutes, 60);
                                                             $minute = $value->minutes % 60;
-                                                            $working_hours_display = $hours.' h ' .$minute.' m';
+                                                            $working_hours_display = intdiv($value->minutes, 60).' h '. ($value->minutes % 60).' m';
                                                             $working_hours = $hours;
 
                                                         }
@@ -60,7 +61,8 @@
                                                             <td class="border px-4 py-2"><a href="#" wire:click="detailView()">View Map</span></td>
                                                         </tr>
                                                         @php 
-                                                         $total_hrs += (float)$working_hours;
+                                                         $hrs += $hours;
+                                                         $mints += $minute;
                                                         }
                                                        
                                                         @endphp 
@@ -98,7 +100,7 @@
                                       <td></td>
                                       <td></td>
                                       <td class="border px-4 py-2">Total Hours</td>
-                                      <td class="border px-4 py-2">{{ $total_hrs  }}</td>
+                                      <td class="border px-4 py-2">{{ $hrs  }} h {{ $mints }} m </td>
                                   </tr>
                                 @else
                                   <tr><td colspan="5">No Records Found</td></tr>

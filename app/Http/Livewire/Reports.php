@@ -107,7 +107,7 @@ class Reports extends Component
         if($res){
 
             foreach($res as $key => $value){
-                $dateWiseData[$key]['date'] = date('d M Y',strtotime($value['date']));
+                $dateWiseData[$key]['date'] = date('d M Y',strtotime($value['created_at']));
                 
                 // $dateWiseData[$key]['date'] = Carbon::createFromFormat('d/M/Y', $value->date);
                 
