@@ -121,7 +121,7 @@ class Dashboard extends Component
         $this->detailMap = true;
         $date = date('Y-m-d',strtotime($date));
 
-        $idealLocation = $this->idealLocations($user_id, $date);
+        // $idealLocation = $this->idealLocations($user_id, $date);
         $this->locations = TrackLocations::where('date', '=', $date)
         ->where('user_id', '=', $user_id)
         // ->whereBetween('time',[$start_time,$end_time])
@@ -153,9 +153,12 @@ class Dashboard extends Component
             $this->reslatLong = json_encode($reslatLong, JSON_NUMERIC_CHECK);
             $this->apiKey = env('GOOGLEMAPAPI');
             $count = $this->locations->count() -1;
-            $this->from_address = $this->getAddressByLatLng($this->locations[0]->latitude,$this->locations[0]->longitude);
-            $this->to_address = $this->getAddressByLatLng($this->locations[$count]->latitude,$this->locations[$count]->longitude);
-            $this->distance = round($this->point2point_distance($this->locations[0]->latitude,$this->locations[0]->longitude, $this->locations[$count]->latitude, $this->locations[$count]->longitude,'K'), 2);
+            // $this->from_address = $this->getAddressByLatLng($this->locations[0]->latitude,$this->locations[0]->longitude);
+            // $this->to_address = $this->getAddressByLatLng($this->locations[$count]->latitude,$this->locations[$count]->longitude);
+            // $this->distance = round($this->point2point_distance($this->locations[0]->latitude,$this->locations[0]->longitude, $this->locations[$count]->latitude, $this->locations[$count]->longitude,'K'), 2);
+            $this->from_address = '--';
+            $this->to_address = '--';
+            $this->distance = '--';
            
            
         }
