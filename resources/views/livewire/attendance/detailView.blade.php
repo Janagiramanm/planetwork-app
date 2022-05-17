@@ -39,7 +39,7 @@
                                                         $date_val =  date('d-m-Y',strtotime($value->date));
                                                       if($value1['date'] ==  $date_val){
                                                         // echo $value->logout.'=='.$value->login.'<br>';
-                                                        $value->logout = ($value->logout != '') ? $value->logout : $value->login;
+                                                        $value->logout = ($value->logout != '') ? date('H:i',strtotime($value->logout)) : '--';
                                                         $working_hours =  round(round(abs(strtotime($value->logout) - strtotime($value->login)) / 60, 2) / 60,2);
                                                             $default = 'no';
                                                         @endphp 
@@ -48,7 +48,7 @@
                                                             <td class="border px-4 py-2">{{ $value1['date'] }}</td>
                                                             <td class="border px-4 py-2">{{ $value1['day'] }}</td>
                                                             <td class="border px-4 py-2">{{ date('H:i',strtotime($value->login)) }}</td>
-                                                            <td class="border px-4 py-2">{{  date('H:i',strtotime($value->logout)) }}</td>
+                                                            <td class="border px-4 py-2">{{  $value->logout }}</td>
                                                             <td class="border px-4 py-2">{{ $working_hours }}</td>
                                                             <td class="border px-4 py-2"><a href="#" wire:click="detailView()">View Map</span></td>
                                                         </tr>
