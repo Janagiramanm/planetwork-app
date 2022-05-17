@@ -36,40 +36,6 @@ class Reports extends Component
         return view('livewire.reports.reports');
     }
 
-    // public function generateWorkReport(){
-    //             $this->validate([
-    //                 'user_id' => 'required',
-    //                 'from_date' => 'required',
-    //                 'to_date' => 'required',
-    //             ]);
-    //             $this->show =true;
-    //             $this->detailReport = false;
-    //             $this->result = null;
-
-    //             $jobs = AssignJobEmployee::where('user_id','=', $this->user_id)
-    //                                       ->whereBetween('created_at',[$this->from_date, $this->to_date])->get();
-
-    //             echo "<pre>";
-    //             //print_r($jobs);
-    //             if($jobs){
-    //                 foreach($jobs as $key => $value){
-    //                     // $dateWiseData[$value->date] =  DB::select('(SELECT * FROM track_locations where user_id = '.$this->user_id.' and date = "'.$value->date.'" ORDER BY id LIMIT 1)
-    //                     //                                       UNION ALL
-    //                     //                                       (SELECT * FROM track_locations where user_id = '.$this->user_id.' and date = "'.$value->date.'" ORDER BY id DESC LIMIT 1)');
-    //                     $this->result[$key]=[
-    //                            'user_id' => $value['user_id'],
-    //                            'user_name' => $value->user->name
-    //                     ];
-    //                     // $result['user_id'] = $value['user_id'];
-    //                     // $result['user_name'] = $value->user->name;
-    //                 }
-    //                 print_r($this->result);
-    //                 exit;
-    //             }
-
-    // }
-
-   
     public function generateWorkReport(){
         $this->validate([
             'user_id' => 'required',
@@ -86,18 +52,9 @@ class Reports extends Component
         $month_number = date("m",strtotime($this->month));
 
         $date = $this->year.'-'.$month_number;
-        
-
-        // $res = WorkReport::where('user_id','=', $this->user_id)
-        //           ->where('date','LIKE',$date.'-%')
-        //           ->where('job_id','!=','0')
-        //           ->get();
-
         $res = WorkReport::select('work_reports.*')->join('jobs', 'work_reports.job_id', '=', 'jobs.id')
                   ->join('customers','jobs.customer_id', '=','customers.id')
-        
                   ->when($this->title, function ($query, $title) {
-                            
                               return $query->where('jobs.sr_no', '=', $title)
                               ->orwhere('customers.first_name','like',$title.'%')
                               ->orwhere('customers.company_name','like',$title.'%');
@@ -110,10 +67,7 @@ class Reports extends Component
         
         $dateWiseData = [];
         if($res){
-            // echo '<pre>';
-            // print_r($res); 
-            // exit;
-
+          
             foreach($res as $key => $value){
                 $dateWiseData[$key]['date'] = date('d M Y',strtotime($value['created_at']));
                 
