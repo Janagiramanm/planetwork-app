@@ -44,7 +44,8 @@
                                                         if($value->minutes !=''){
                                                             $hours = $value->minutes / 60;
                                                             $minute = $value->minutes % 60;
-                                                            $working_hours = $hours.' h ' .$minute.' m';
+                                                            $working_hours_display = $hours.' h ' .$minute.' m';
+                                                            $working_hours = $hours.'.'.$minute;
 
                                                         }
                                                             $default = 'no';
@@ -55,7 +56,7 @@
                                                             <td class="border px-4 py-2">{{ $value1['day'] }}</td>
                                                             <td class="border px-4 py-2">{{ date('H:i',strtotime($value->login)) }}</td>
                                                             <td class="border px-4 py-2">{{  $value->logout }}</td>
-                                                            <td class="border px-4 py-2">{{ $working_hours }}</td>
+                                                            <td class="border px-4 py-2">{{ $working_hours_display }}</td>
                                                             <td class="border px-4 py-2"><a href="#" wire:click="detailView()">View Map</span></td>
                                                         </tr>
                                                         @php 
