@@ -121,7 +121,7 @@ class Dashboard extends Component
         $this->detailMap = true;
         $date = date('Y-m-d',strtotime($date));
 
-        // $idealLocation = $this->idealLocations($user_id, $date);
+        $idealLocation = $this->idealLocations($user_id, $date);
         $this->locations = TrackLocations::where('date', '=', $date)
         ->where('user_id', '=', $user_id)
         // ->whereBetween('time',[$start_time,$end_time])
