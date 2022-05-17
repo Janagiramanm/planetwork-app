@@ -88,24 +88,24 @@ class Reports extends Component
         $date = $this->year.'-'.$month_number;
         
 
-        $res = WorkReport::where('user_id','=', $this->user_id)
-                  ->where('date','LIKE',$date.'-%')
-                  ->where('job_id','!=','0')
-                  ->get();
-
-        // $res = WorkReport::join('jobs', 'work_reports.job_id', '=', 'jobs.id')
-        //           ->join('customers','jobs.customer_id', '=','customers.id')
-        
-        //           ->when($this->title, function ($query, $title) {
-                            
-        //                       return $query->where('jobs.sr_no', '=', $title)
-        //                       ->orwhere('customers.first_name','like',$title.'%')
-        //                       ->orwhere('customers.company_name','like',$title.'%');
-        //           })
-        //           ->where('work_reports.user_id','=', $this->user_id)
-        //           ->where('work_reports.date','LIKE',$date.'-%')
-        //           ->where('work_reports.job_id','!=','0')
+        // $res = WorkReport::where('user_id','=', $this->user_id)
+        //           ->where('date','LIKE',$date.'-%')
+        //           ->where('job_id','!=','0')
         //           ->get();
+
+        $res = WorkReport::select('work_reports.*')->join('jobs', 'work_reports.job_id', '=', 'jobs.id')
+                  ->join('customers','jobs.customer_id', '=','customers.id')
+        
+                  ->when($this->title, function ($query, $title) {
+                            
+                              return $query->where('jobs.sr_no', '=', $title)
+                              ->orwhere('customers.first_name','like',$title.'%')
+                              ->orwhere('customers.company_name','like',$title.'%');
+                  })
+                  ->where('work_reports.user_id','=', $this->user_id)
+                  ->where('work_reports.date','LIKE',$date.'-%')
+                  ->where('work_reports.job_id','!=','0')
+                  ->get();
        
         
         $dateWiseData = [];
