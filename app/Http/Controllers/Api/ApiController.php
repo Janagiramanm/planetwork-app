@@ -115,12 +115,7 @@ class ApiController extends Controller
                                $workReport->is_reached = 'true';
                             }
                             $workReport->save();
-                            // $query = DB::getQueryLog();
-                            // print_r($workReport);
-                            // exit;
-                            // dd(DB::getQueryLog());
-                            // exit;
-                            // dd(DB::getQueryLog());
+                          
                         }else{
                             $workReport = new WorkReport();
                             $workReport->date = $value['date'];
@@ -328,46 +323,7 @@ class ApiController extends Controller
         // $this->result = $dateWiseData;
 
         return $dateWiseData;
-       
-      /*  $result  = DB::select('SELECT * 
-                               FROM track_locations 
-                               INNER JOIN 
-                               (SELECT MAX(id) as id,FLOOR(UNIX_TIMESTAMP(time)/(14 * 60)) AS timekey FROM track_locations where  user_id='.$user_id.' and date = "'.$date.'"  GROUP BY timekey) last_updates 
-                               ON last_updates.id = track_locations.id');
-
-        $pause = TrackLocations::where('status', '=', 2)
-        ->where('user_id','=', $user_id)
-        ->where('date','=', $date)->get();
-
-        $count = count($result) - 1;
-
-       // $distance = round($this->point2point_distance($result[0]->latitude,$result[0]->longitude, $result[$count]->latitude, $result[$count]->longitude,'K'), 2);
-        $distance = round($this->calculateDistanceBetweenTwoPoints($result[0]->latitude,$result[0]->longitude, $result[$count]->latitude, $result[$count]->longitude, 'KM'),1);
-        $ideal_locations = $this->calculateDistanceBetweenTwoPoints($result[0]->latitude,$result[0]->longitude, $result[$count]->latitude, $result[$count]->longitude, 'MT');
-        $ideal = [];
-        
-        if($distance < 20){
-             // $ideal[] = $lat2.','.$lng2;
-              $ideal[] = ['lat'=> $result[$count]->latitude, 'lng'=>$result[$count]->longitude];
-              
-          }
-          
-        if(!$result){
-             return [
-                 'status' => 0,
-                 'message' => 'No data found'
-             ];
-        }
- 
-        return [
-             'status' => 1,
-             'distance' => $distance,
-             'travelhistory' => $result,
-             'pauselocations' => $pause,            
-             'ideal_locations' => $ideal
-         ];
-         */
- 
+    
      }
 
      public function point2point_distance($lat1, $lon1, $lat2, $lon2, $unit) 
@@ -521,7 +477,7 @@ class ApiController extends Controller
              foreach($details as $key => $value){
                  if($date == date('d-m-Y',strtotime($value->date))){
                      $login = date('H:i',strtotime($value->login));
-                     $logout = date('H:i',strtotime($value->logout));
+                     $logout = $value->logout ? date('H:i',strtotime($value->logout)): '0';
                      $actual_hours = $value->minutes ? $value->minutes : '0';
                  }
              }
