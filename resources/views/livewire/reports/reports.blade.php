@@ -52,7 +52,7 @@
                           
                             <div class="w-1/5">
                                 <x-jet-label for="to_date" value="{{ __('Search') }}" />
-                                <input type="text" name="title" value="" class="mt-1" />
+                                <input type="text" wire:model.defer="title"  name="title" value="" class="mt-1" />
                               
                             </div>
                           

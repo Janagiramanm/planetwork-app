@@ -522,7 +522,7 @@ class ApiController extends Controller
                  if($date == date('d-m-Y',strtotime($value->date))){
                      $login = date('H:i',strtotime($value->login));
                      $logout = date('H:i',strtotime($value->logout));
-                     $actual_hours = $value->minutes;
+                     $actual_hours = $value->minutes ? $value->minutes : '0';
                  }
              }
             $result['report'][]  = [

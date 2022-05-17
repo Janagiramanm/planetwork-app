@@ -13,7 +13,7 @@ use DateTime;
 
 class Reports extends Component
 {
-    public $user_id, $from_date,$to_date, $now, $current_month, $current_year, $month, $year;
+    public $user_id, $from_date,$to_date, $now, $current_month, $current_year, $month, $year, $title;
     public $result, $months, $years = [];
     public $reportShow, $processing, $detailReport, $viewPath, $reportView = false;
     public $status = ['logout','login','pause'];
@@ -82,16 +82,19 @@ class Reports extends Component
         $this->detailReport = false;
         $this->result = null;
 
+
         $month_number = date("m",strtotime($this->month));
 
         $date = $this->year.'-'.$month_number;
         
 
-        $res = WorkReport::where('user_id','=', $this->user_id)
+        $res = WorkReport::when($this->title, function ($query, $title) {
+                              //$query->where('sr_no',$title);
+                              return $query->where('sr_no', '=', $title);
+                  })
+                  ->where('user_id','=', $this->user_id)
                   ->where('date','LIKE',$date.'-%')
-                //   ->where('date',[$from_date, $to_date])
                   ->where('job_id','!=','0')
-                 // ->where('is_reached','=','true')
                   ->get();
        
         
