@@ -41,10 +41,12 @@
                                                         // echo $value->logout.'=='.$value->login.'<br>';
                                                         $value->logout = ($value->logout != '') ? date('H:i',strtotime($value->logout)) : '--';
                                                         $working_hours = '0';
-                                                        if($value->logout !='--'){
-                                                            $working_hours =  round(round(abs(strtotime($value->logout) - strtotime($value->login)) / 60, 2) / 60,2);
+                                                        if($value->minutes !=''){
+                                                            $hours = $value->minutes / 60;
+                                                            $minute = $value->minutes % 60;
+                                                            $working_hours = $hours.' h ' .$minute.' m';
+
                                                         }
-                                                        
                                                             $default = 'no';
                                                         @endphp 
                                                 
