@@ -43,6 +43,8 @@
                                                         $value->logout = ($value->logout != '') ? date('H:i',strtotime($value->logout)) : '--';
                                                         $working_hours = '0';
                                                         $working_hours_display = '--';
+                                                        $hours = 0;
+                                                        $minute = 0;
                                                         if($value->minutes !=''){
                                                             $hours = intdiv($value->minutes, 60);
                                                             $minute = $value->minutes % 60;

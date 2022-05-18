@@ -129,8 +129,7 @@ $('document').ready(function(){
                                                                                                         size: new google.maps.Size(150, 50)
                                                                                                 });
 
-                                                                                                console.log('userId',user_id);
-                                                                                                console.log('date==', date);
+                                                                                                
                         
                                                                                                 var marker = new google.maps.Marker({
                                                                                                 position: results[0].geometry.location,
@@ -166,95 +165,7 @@ $('document').ready(function(){
                                                         }
                                                
                                                   }});
-                                // console.log(address);
-                                // var marker = new google.maps.Marker({
-                                //                 // position: new google.maps.LatLng(locations[i].lat, locations[i].lng),
-                                //                 position: address,
-                                //                 map: map,
-                                //                 title: locations[i][3],
-                                // });
-
-                                //         var infowindow = new google.maps.InfoWindow({
-                                //                 content: locations[i].details,
-                                //                 maxWidth: 160
-                                //         });
-                                        
                                 
-                                //        google.maps.event.addListener(marker, 'mouseout', function() {
-                                //         infowindow.close();
-                                //         });
-
-                                //         google.maps.event.addListener(marker, 'mouseover', (function(marker, i) {
-                                //                 return function() {
-                                //                 // close all the other infowindows that opened on load
-                                //                 google.maps.event.trigger(map, 'click')
-                                                
-                                //                 infowindow.setContent(locations[i].details);
-                                //                 infowindow.open(map, marker);
-                                //                 }
-                                //         })(marker, i));
-
-                      
-                               
-                        //        $.get({ 
-                                        
-                        //                 url: `https://maps.googleapis.com/maps/api/geocode/json?latlng=${locations[i][1]},${locations[i][2]}&sensor=false&key=${apikey}`,
-                        //                 data: {'userId':user_id,'date':date},
-                        //                 success(res) {
-                        //                 if (geocoder) {
-                        //                       //console.log(data);
-                        //                       //  const urlParams = new URLSearchParams();
-                        //                 //       var urlParams = new URL(url);
-                        //                 //       // var udetails = url.searchParams.get("details");
-                        //                 //       var udetails = urlParams.get('latlng');
-                        //                       console.log(userId);
-                                             
-                        //                         geocoder.geocode({
-                        //                         'address': res.results[0].formatted_address,
-                                                                                            
-                        //                         }, function(results, status) {
-                        //                                 // console.log(data.userId);
-                        //                                 if (status == google.maps.GeocoderStatus.OK) {
-                        //                                         if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
-                        //                                                 map.setCenter(results[0].geometry.location);
-
-                        //                                                 var infowindow = new google.maps.InfoWindow({
-                        //                                                         content: details+'<br><b>' + results[0].formatted_address + '</b>',
-                        //                                                         size: new google.maps.Size(150, 50)
-                        //                                                 });
-
-                        //                                                 var marker = new google.maps.Marker({
-                        //                                                 position: results[0].geometry.location,
-                        //                                                 map: map,
-                        //                                                 // content: details+ results[0].formatted_address
-                        //                                                 });
-                        //                                                 google.maps.event.addListener(marker, 'mouseover', function() {
-                        //                                                        infowindow.open(map, marker);
-                        //                                                 });
-
-                        //                                                 google.maps.event.addListener(marker, 'mouseout', function() {
-                        //                                                                 infowindow.close();
-                        //                                                 });
-
-                        //                                                   google.maps.event.addListener(marker, 'click', function(e) {
-                        //                                                         Livewire.emit('getDetailPath',  user_id, date);
-                        //                                                 });
-
-                        //                                                 //details = null;
-                        //                                                 delete details;
-
-                        //                                         } else {
-                        //                                         alert("No results found");
-                        //                                         }
-                        //                                 } else {
-                        //                                         alert("Geocode was not successful for the following reason: " + status);
-                        //                                 }
-                        //                         });
-                        //                 }
-                               
-                        //           }});
-
-                       
                        
                         }
            },500)

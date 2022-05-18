@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\UserRole;
 use Livewire\Component;
 use Carbon\Carbon;
+use App\Models\WorkReport;
 use DB;
 use DateTime;
 use URL;
@@ -18,13 +19,14 @@ class Dashboard extends Component
     public $locations,$lat,$lng, $user_id, $job_date, $details, $date, $reslatLong, $wayPoints,
            $apiKey, $count, $distance, $user_name,$from_address,$to_address,$ideal,$ideal_locations,
            $from_date,$to_date,$customer_type, $business, $individual, $show, $baseUrl, $new_time, $insert_date,
-           $threeHours,$thirtyMinutes,$totalDuration;
+           $threeHours,$thirtyMinutes,$totalDuration, $report, $date_display, $uId;
     public $latLong = [];
-    public $detailMap = false;
+    public $detailMap,$mapPath = false;
       
     protected $listeners = [
-        'getDetailPath'
+        'getDetailPath', 'getDetailMapData'
    ];
+    public $getDetailMapData = '\App\Http\Livewire\Dashboard::getDetailMapData';
    
     public function render()
     {
@@ -118,20 +120,61 @@ class Dashboard extends Component
     }
 
     public function getDetailPath($user_id, $date){
-        $this->detailMap = true;
-        $date = date('Y-m-d',strtotime($date));
+         $this->detailMap = true;
+         $this->date = date('Y-m-d',strtotime($date));
+         $this->user_id = $user_id; 
+         $this->uId  = $user_id;
+        //  $this->mapPath = true;
+         
 
-        $idealLocation = $this->idealLocations($user_id, $date);
-        $this->locations = TrackLocations::where('date', '=', $date)
-        ->where('user_id', '=', $user_id)
+        // $idealLocation = $this->idealLocations($user_id, $date);
+        //
+
+        // echo 'user=='.$user_id;
+        // echo '  date==='.$date;
+        $this->report =  WorkReport::where('user_id','=', $this->user_id)
+         ->where('created_at','LIKE',$this->date.'%')->get();
+
+        // echo '<pre>';
+        // print_r($report);
+        if($this->report){
+            foreach($this->report as $key => $value){
+                $this->user_name = $value->user->name;
+                $this->date_display = date('d-m-Y',strtotime($value->created_at));
+                $this->distance = $value->travel_distance;
+                $this->from_address = $value->from_address;
+                $this->to_address = $value->to_address;
+            }
+        }
+        $this->apiKey = env('GOOGLEMAPAPI');
+        // exit;
+
+        $res = [];
+        $reslatLong=[];
+        $this->apiKey = env('GOOGLEMAPAPI');
+    //    $this->reslatLong =  json_encode($reslatLong, JSON_NUMERIC_CHECK);
+        // $this->getDetailMapData();
+        
+    }
+
+    public function getDetailMapData(){
+
+       
+
+        $res = [];
+        $reslatLong=[];
+        $this->mapPath = true;
+        $idealLocation = $this->idealLocations($this->uId, $this->date);
+        $this->locations = TrackLocations::where('date', '=', $this->date)
+        ->where('user_id', '=', $this->uId)
         // ->whereBetween('time',[$start_time,$end_time])
         ->orderBy('time', 'asc')
         ->get();
 
-        $res = [];
-        $reslatLong=[];
+        // echo '<pre>';
+    
      
-        if(!$this->locations->isEmpty()){
+        if(!$this->locations ->isEmpty()){
             foreach($this->locations as $key => $value){
                 
                 $details = '<b>'.$value->user->name.'</b><br> Date : '.date('d-m-Y',strtotime($value->date)) 
@@ -140,30 +183,17 @@ class Dashboard extends Component
                 
                     
                 $reslatLong[] = ['lat'=>$value->latitude, 'lng'=>$value->longitude, 'time'=>$value->time];
-                // $reslatLong[] = ['lat'=>$value->latitude, 'lng'=>$value->longitude, 'detail'=>$details];
-                // $res[] = [$details, $value->latitude, $value->longitude, $key];
-                // $wayPoints[] = $value->latitude.','.$value->longitude;
-                $this->lat =  $value->latitude;
-                $this->lng = $value->longitude;
-                $this->user_id = $value->user_id;
-                $this->job_date = $value->date;
-                $this->user_name = $value->user->name;
+               
             }
-            $this->date = $date;
-            $this->reslatLong = json_encode($reslatLong, JSON_NUMERIC_CHECK);
-            $this->apiKey = env('GOOGLEMAPAPI');
-            $count = $this->locations->count() -1;
-            $this->from_address = $this->getAddressByLatLng($this->locations[0]->latitude,$this->locations[0]->longitude);
-            $this->to_address = $this->getAddressByLatLng($this->locations[$count]->latitude,$this->locations[$count]->longitude);
-            $this->distance = round($this->point2point_distance($this->locations[0]->latitude,$this->locations[0]->longitude, $this->locations[$count]->latitude, $this->locations[$count]->longitude,'K'), 2);
-            // $this->from_address = '--';
-            // $this->to_address = '--';
-            // $this->distance = '--';
-           
-           
+            // $this->date = $date;
+            $this->reslatLong =  json_encode($reslatLong, JSON_NUMERIC_CHECK);
+            // echo '<pre>';
+            // print_r($this->reslatLong);
+            
         }
-        
     }
+
+
 
     public function back(){
         $this->detailMap = false;
@@ -240,7 +270,7 @@ class Dashboard extends Component
                        // $distance =  $this->point2point_distance($lat1, $lng1, $lat2, $lng2, 'M');
                         $distance =  $this->calculateDistanceBetweenTwoPoints($lat1, $lng1, $lat2, $lng2, 'MT');
                      
-                     if($distance < 20){
+                     if($distance < 50){
                           // $ideal[] = $lat2.','.$lng2;
                            $ideal[] = ['lat'=> $lat2, 'lng'=>$lng2];
                            
