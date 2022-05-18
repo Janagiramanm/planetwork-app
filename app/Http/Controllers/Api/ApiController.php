@@ -91,7 +91,7 @@ class ApiController extends Controller
                     $track->save();
 
                     $report = WorkReport::where('user_id','=', $value['user_id'])
-                                        ->where('date', '=', $value['date'])
+                                        ->where('created_at', 'LIKE', $value['date'].'%')
                                         // ->where('job_id', '=', $value['job_id'])
                                         ->orderBy('id','desc')
                                         ->latest()
