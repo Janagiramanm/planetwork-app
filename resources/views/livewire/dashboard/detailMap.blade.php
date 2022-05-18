@@ -41,7 +41,7 @@
                 @if($mapPath)
                      @include('livewire.dashboard.map')
                 @endif
-                <button wire:click="getDetailMapData" id="map-view-btn"></button>
+                <button wire:click="getDetailMapData" id="map-view-btn" class="hidden"></button>
          
         </div>   
         <script>

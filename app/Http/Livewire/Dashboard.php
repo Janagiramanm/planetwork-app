@@ -32,17 +32,9 @@ class Dashboard extends Component
     {
         $curdate = date('Y-m-d H:i:s');
         
-        // $startdate = isset( $this->from_date) ? $this->from_date:$curdate;
-        // $enddate = isset($this->to_date) ? $this->to_date:$curdate;
         $user_id = isset($_GET['user_id'])!='' ? $_GET['user_id']:'';
         $date = isset($_GET['date'])!='' ? $_GET['date']:'';
-        // $this->from_date = isset($_GET['from_date']) ? $_GET['from_date']:$curdate;
-        // $this->to_date = isset($_GET['to_date']) ? $_GET['to_date']:$curdate;
-        // $userCondition = '';
-        // if($this->user_id!=''){
-        //    $userCondition = " and user_id = ".$this->user_id;
-        // }
-
+       
         $this->users = User::whereHas('role', function ($query) {
             $query->where('role_id', '=', '3');
          })->get();
@@ -73,9 +65,6 @@ class Dashboard extends Component
                                         ON last_updates.id = track_locations.id');
             }
 
-            // echo '<pre>';
-            // print_r($users);
-            // exit;
             $res = [];
   
             if($users){
@@ -112,10 +101,6 @@ class Dashboard extends Component
         $this->latLong = json_encode($res, JSON_NUMERIC_CHECK);
         $this->baseUrl = URL::to('/');
 
-        // echo '<pre>';
-        // print_r($this->latLong);
-        // exit; 
-
         return view('livewire.dashboard.dashboard');
     }
 
@@ -124,19 +109,9 @@ class Dashboard extends Component
          $this->date = date('Y-m-d',strtotime($date));
          $this->user_id = $user_id; 
          $this->uId  = $user_id;
-        //  $this->mapPath = true;
-         
-
-        // $idealLocation = $this->idealLocations($user_id, $date);
-        //
-
-        // echo 'user=='.$user_id;
-        // echo '  date==='.$date;
-        $this->report =  WorkReport::where('user_id','=', $this->user_id)
+         $this->report =  WorkReport::where('user_id','=', $this->user_id)
          ->where('created_at','LIKE',$this->date.'%')->get();
 
-        // echo '<pre>';
-        // print_r($report);
         if($this->report){
             foreach($this->report as $key => $value){
                 $this->user_name = $value->user->name;
@@ -147,13 +122,6 @@ class Dashboard extends Component
             }
         }
         $this->apiKey = env('GOOGLEMAPAPI');
-        // exit;
-
-        $res = [];
-        $reslatLong=[];
-        $this->apiKey = env('GOOGLEMAPAPI');
-    //    $this->reslatLong =  json_encode($reslatLong, JSON_NUMERIC_CHECK);
-        // $this->getDetailMapData();
         
     }
 
@@ -164,6 +132,7 @@ class Dashboard extends Component
         $res = [];
         $reslatLong=[];
         $this->mapPath = true;
+        $this->apiKey = env('GOOGLEMAPAPI');
         $idealLocation = $this->idealLocations($this->uId, $this->date);
         $this->locations = TrackLocations::where('date', '=', $this->date)
         ->where('user_id', '=', $this->uId)
@@ -179,16 +148,12 @@ class Dashboard extends Component
                 
                 $details = '<b>'.$value->user->name.'</b><br> Date : '.date('d-m-Y',strtotime($value->date)) 
                           .'<br> Time : '. $value->time;
-
-                
-                    
+    
                 $reslatLong[] = ['lat'=>$value->latitude, 'lng'=>$value->longitude, 'time'=>$value->time];
                
             }
-            // $this->date = $date;
             $this->reslatLong =  json_encode($reslatLong, JSON_NUMERIC_CHECK);
-            // echo '<pre>';
-            // print_r($this->reslatLong);
+            
             
         }
     }
