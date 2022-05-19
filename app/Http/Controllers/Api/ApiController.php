@@ -419,13 +419,15 @@ class ApiController extends Controller
        
 
         $data = $request->data;  
-        
-        foreach($data as $key => $value){
 
-            $user_id = $value->user_id;
-            $login_date = $value->date;
-            $login_time = $value->login_time;
-            $logout_time = $value->logout_time;
+        foreach($data as $value){
+            // print_r($value);
+        
+
+            $user_id = $value['user_id'];
+            $login_date = $value['date'];
+            $login_time = $value['login_time'];
+            $logout_time = $value['logout_time'];
 
             $attendance = Attendance::where('date','=',$login_date)
             ->where('login','=', $login_time)
