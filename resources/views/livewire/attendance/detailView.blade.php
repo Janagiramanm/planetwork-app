@@ -1,13 +1,10 @@
 
             <div>
                 @if($employee)
-                   
                          <div> Name: {{ $employee->name }}</div> 
                          <div> Emp Code: {{ $employee->employeeDetail->emp_code}}</div> 
-                         <div>Mobile: {{ $employee->mobile }}</div> 
-                         <div>Date of Join: {{ $employee->employeeDetail->date_of_join }}</div> 
-                         
-                    
+                         <div> Mobile: {{ $employee->mobile }}</div> 
+                         <div> Date of Join: {{ $employee->employeeDetail->date_of_join }}</div> 
                 @endif
             </div>
             <table class="table-fixed w-full">
@@ -32,40 +29,41 @@
                                 @endphp 
                                    @foreach($monthInDays as $key1 => $value1)
                                                  @php
-                                                     $default = 'yes';
+                                                      $default = 'yes';
+                                                      $date_path = date('Y-m-d',strtotime($value1['date']));
                                                    
                                                       @endphp
                                                       @foreach($details as $key => $value)
                                                         @php 
                                                         $date_val =  date('d-m-Y',strtotime($value->date));
-                                                      if($value1['date'] ==  $date_val){
-                                                        // echo $value->logout.'=='.$value->login.'<br>';
-                                                        $value->logout = ($value->logout != '') ? date('H:i',strtotime($value->logout)) : '--';
-                                                        $working_hours = '0';
-                                                        $working_hours_display = '--';
-                                                        $hours = 0;
-                                                        $minute = 0;
-                                                        if($value->minutes !=''){
-                                                            $hours = intdiv($value->minutes, 60);
-                                                            $minute = $value->minutes % 60;
-                                                            $working_hours_display = intdiv($value->minutes, 60).' h '. ($value->minutes % 60).' m';
-                                                            $working_hours = $hours;
+                                                        if($value1['date'] ==  $date_val){
+                                                            // echo $value->logout.'=='.$value->login.'<br>';
+                                                            $value->logout = ($value->logout != '') ? date('H:i',strtotime($value->logout)) : '--';
+                                                            $working_hours = '0';
+                                                            $working_hours_display = '--';
+                                                            $hours = 0;
+                                                            $minute = 0;
+                                                            if($value->minutes !=''){
+                                                                $hours = intdiv($value->minutes, 60);
+                                                                $minute = $value->minutes % 60;
+                                                                $working_hours_display = intdiv($value->minutes, 60).' h '. ($value->minutes % 60).' m';
+                                                                $working_hours = $hours;
 
-                                                        }
-                                                            $default = 'no';
-                                                        @endphp 
-                                                
-                                                        <tr style="background:{{ $value1['color'] }};">
-                                                            <td class="border px-4 py-2">{{ $value1['date'] }}</td>
-                                                            <td class="border px-4 py-2">{{ $value1['day'] }}</td>
-                                                            <td class="border px-4 py-2">{{ date('H:i',strtotime($value->login)) }}</td>
-                                                            <td class="border px-4 py-2">{{  $value->logout }}</td>
-                                                            <td class="border px-4 py-2">{{ $working_hours_display }}</td>
-                                                            <td class="border px-4 py-2"><a href="#" wire:click="detailView()">View Map</span></td>
-                                                        </tr>
-                                                        @php 
-                                                         $hrs += $hours;
-                                                         $mints += $minute;
+                                                            }
+                                                                $default = 'no';
+                                                            @endphp 
+                                                    
+                                                            <tr style="background:{{ $value1['color'] }};">
+                                                                <td class="border px-4 py-2">{{ $value1['date'] }}</td>
+                                                                <td class="border px-4 py-2">{{ $value1['day'] }}</td>
+                                                                <td class="border px-4 py-2">{{ date('H:i',strtotime($value->login)) }}</td>
+                                                                <td class="border px-4 py-2">{{  $value->logout }}</td>
+                                                                <td class="border px-4 py-2">{{ $working_hours_display }}</td>
+                                                                <td class="border px-4 py-2"><a href="#" wire:click="pathView(`{{ $this->user_id }}`,`{{ $date_path }}`)">View Map</span></td>
+                                                            </tr>
+                                                            @php 
+                                                            $hrs += $hours;
+                                                            $mints += $minute;
                                                         }
                                                        
                                                         @endphp 
@@ -84,7 +82,6 @@
                                                                 <td class="border px-4 py-2">--</td>
                                                                 <td class="border px-4 py-2">--</td>
                                                                 <td class="border px-4 py-2">--</td>
-                                                                
                                                             @endif
 
                                                             <td class="border px-4 py-2">--</td>

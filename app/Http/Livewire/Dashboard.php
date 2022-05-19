@@ -127,8 +127,6 @@ class Dashboard extends Component
 
     public function getDetailMapData(){
 
-       
-
         $res = [];
         $reslatLong=[];
         $this->mapPath = true;
@@ -140,21 +138,13 @@ class Dashboard extends Component
         ->orderBy('time', 'asc')
         ->get();
 
-        // echo '<pre>';
-    
-     
         if(!$this->locations ->isEmpty()){
             foreach($this->locations as $key => $value){
-                
                 $details = '<b>'.$value->user->name.'</b><br> Date : '.date('d-m-Y',strtotime($value->date)) 
                           .'<br> Time : '. $value->time;
-    
                 $reslatLong[] = ['lat'=>$value->latitude, 'lng'=>$value->longitude, 'time'=>$value->time];
-               
             }
             $this->reslatLong =  json_encode($reslatLong, JSON_NUMERIC_CHECK);
-            
-            
         }
     }
 

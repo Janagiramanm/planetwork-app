@@ -160,7 +160,9 @@ class ApiController extends Controller
             // if($insert){
                 return [
                     'status' => 1,
-                    'message' => 'Successfully Inserted.'
+                    'message' => 'Successfully Inserted.',
+                    'distance' => $distance,
+                    'travel_distance' => $travelDistance
                ];
             // }
                
@@ -168,7 +170,9 @@ class ApiController extends Controller
 
            return [
              'status' => 0,
-             'message' => 'Empty data is coming .'
+             'message' => 'Empty data is coming .',
+             'distance' => $distance,
+             'travel_distance' => $travelDistance
             ];
            
     }
@@ -411,33 +415,70 @@ class ApiController extends Controller
     }
 
     public function attendance(Request $request){
+
+       
+
+        $data = $request->data;  
         
-        $type = $request->type;
-        if($type == 'login'){
-            $attendance = new Attendance();
-            $attendance->user_id = $request->user_id;
-            $attendance->date = date('Y-m-d', strtotime($request->date));
-            $attendance->login = $request->date;
-            $attendance->save();
-            return [
-                'status' => 1,
-                'login_id' => $attendance->id
-            ];
+        foreach($data as $key => $value){
+
+            $user_id = $value->user_id;
+            $login_date = $value->date;
+            $login_time = $value->login_time;
+            $logout_time = $value->logout_time;
+
+            $attendance = Attendance::where('date','=',$login_date)
+            ->where('login','=', $login_time)
+            ->where('user_id', '=', $user_id)
+            ->first();
+
+            if($attendance){
+                    $update = Attendance::find($attendance->id);
+                    $update->logout =  $logout_time;
+                    $update->save();
+            }else{
+                    $insert = new Attendance();
+                    $insert->user_id =  $user_id;
+                    $insert->date =  $login_date;
+                    $insert->login =  $login_time;
+                    $insert->logout =  $logout_time;
+                    $insert->save();
+            }
+
         }
-        if($type == 'logout'){
-            $attendance = Attendance::find($request->login_id);
-            $to = Carbon::createFromFormat('Y-m-d H:i:s', $request->date);
-            $from = Carbon::createFromFormat('Y-m-d H:i:s', $attendance->login);
-            $diff_in_minutes = $to->diffInMinutes($from);
+
+        return [
+            'status' => 1,
+            'message' => 'Succesfully'
+        ];
+
+       
+        // $type = $request->type;
+        // if($type == 'login'){
+        //     $attendance = new Attendance();
+        //     $attendance->user_id = $request->user_id;
+        //     $attendance->date = date('Y-m-d', strtotime($request->date));
+        //     $attendance->login = $request->date;
+        //     $attendance->save();
+        //     return [
+        //         'status' => 1,
+        //         'login_id' => $attendance->id
+        //     ];
+        // }
+        // if($type == 'logout'){
+        //     $attendance = Attendance::find($request->login_id);
+        //     $to = Carbon::createFromFormat('Y-m-d H:i:s', $request->date);
+        //     $from = Carbon::createFromFormat('Y-m-d H:i:s', $attendance->login);
+        //     $diff_in_minutes = $to->diffInMinutes($from);
            
-            $attendance->logout = $request->date;
-            $attendance->minutes = $diff_in_minutes;
-            $attendance->save();
-            return [
-                'status' => 1,
-                'message' => 'Succesfully logout'
-            ];
-        }
+        //     $attendance->logout = $request->date;
+        //     $attendance->minutes = $diff_in_minutes;
+        //     $attendance->save();
+        // return [
+        //     'status' => 1,
+        //     'message' => 'Succesfully logout'
+        // ];
+        // }
 
     }
 

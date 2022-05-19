@@ -7,6 +7,11 @@
 <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4">
+        @if($detailView)
+                        @include('livewire.attendance.detailView')
+                    @elseif($mapView)
+                         @include('livewire.attendance.detailMap')
+                    @else
         <div class="flex flex-wrap -mx-3 mb-6 px-4">
                             <div class="w-1/5">
                                 <x-jet-label for="from_date" value="{{ __('Month') }}" />
@@ -40,10 +45,8 @@
                             </div>
                             
                     </div>
-                    @if($detailView)
-                        @include('livewire.attendance.detailView')
-                    @else
-                       <table class="table-fixed w-full">
+                   
+                        <table class="table-fixed w-full">
                             <thead>
                                 <tr class="bg-gray-100">
                                     <th class=" py-2">Name</th>
@@ -51,7 +54,6 @@
                                     <th class=" py-2">Total Hours</th>
                                     <th class=" py-2">Over / Less Time ( Hours )</th>
                                     <th class=" py-2">Details</th>
-                                    
                                 </tr>   
                             </thead>
                             <tbody>
@@ -76,7 +78,7 @@
                                   <tr><td colspan="5">No Records Found</td></tr>
                                  @endif
                             </tbody>
-                     </table>
+                        </table>
                      @endif
 
 </div>
