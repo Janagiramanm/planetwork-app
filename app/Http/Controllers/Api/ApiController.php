@@ -421,13 +421,11 @@ class ApiController extends Controller
         $data = $request->data;  
 
         foreach($data as $value){
-            // print_r($value);
-        
-
             $user_id = $value['user_id'];
             $login_date = $value['date'];
             $login_time = $value['login_time'];
             $logout_time = $value['logout_time'];
+            $minutes = 0;
 
             $attendance = Attendance::where('date','=',$login_date)
             ->where('login','=', $login_time)
@@ -435,8 +433,12 @@ class ApiController extends Controller
             ->first();
 
             if($attendance){
+                    $to = Carbon::createFromFormat('Y-m-d H:i:s', $logout_time);
+                    $from = Carbon::createFromFormat('Y-m-d H:i:s', $login_time);
+                    $difference = $to->diffInMinutes($from);
                     $update = Attendance::find($attendance->id);
                     $update->logout =  $logout_time;
+                    $update->minutes = $difference;
                     $update->save();
             }else{
                     $insert = new Attendance();
