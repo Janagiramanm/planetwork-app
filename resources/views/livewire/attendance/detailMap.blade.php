@@ -16,7 +16,7 @@
                         <span class="font-sans md:font-serif text-sm mt-1 ml-3"> {{ $this->to_address }} </span>
                     </div>
                 </div>
-                @if(!$mapPath)
+               
                 <div wire:loading class="flex ml-24 justify-center items-center">
                        <div class="flex justify-center items-center">
                         <div
@@ -30,7 +30,7 @@
                         ></div>
                         </div>  
                     </div>
-                @endif
+                
                 @if($mapPath)
                      @include('livewire.attendance.map')
                 @endif

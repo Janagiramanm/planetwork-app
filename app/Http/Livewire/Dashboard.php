@@ -30,8 +30,7 @@ class Dashboard extends Component
    
     public function render()
     {
-        $curdate = '';// date('Y-m-d'); //'2022-05-18'; //     
-        
+        $curdate =  date('Y-m-d'); //'2022-05-18'; //     
         $user_id = isset($_GET['user_id'])!='' ? $_GET['user_id']:'';
         $date = isset($_GET['date'])!='' ? $_GET['date']:'';
        
@@ -135,14 +134,14 @@ class Dashboard extends Component
         $this->mapPath = true;
         $this->apiKey = env('GOOGLEMAPAPI');
         // $idealLocation = $this->idealLocations($this->uId, $this->date);
-        $locations = TrackLocations::select('latitude','longitude')->where('date', '=', $this->date)
+        $locations = TrackLocations::select('latitude as lat','longitude as lng','time')->where('date', '=', $this->date)
         ->where('user_id', '=', $this->uId)
         // ->whereBetween('time',[$start_time,$end_time])
         ->orderBy('time', 'asc')
         ->get();
 
         // echo '<pre>';
-        print_r($locations);
+        // print_r($locations);
 
         // if(!$this->locations ->isEmpty()){
         //     foreach($this->locations as $key => $value){
@@ -150,7 +149,8 @@ class Dashboard extends Component
         //                   .'<br> Time : '. $value->time;
         //         $reslatLong[] = ['lat'=>$value->latitude, 'lng'=>$value->longitude, 'time'=>$value->time];
         //     }
-        //     $this->reslatLong =  json_encode($reslatLong, JSON_NUMERIC_CHECK);
+            $this->reslatLong =  json_encode($locations, JSON_NUMERIC_CHECK);
+            //print_r($this->reslatLong);
         // }
     }
 

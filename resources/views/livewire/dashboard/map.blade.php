@@ -40,7 +40,7 @@
    
     var bounds = new google.maps.LatLngBounds();
     var lastplace = goldenGatePosition.length - 1 ;
-    var distance =  getDistanceFromLatLonInKm(goldenGatePosition[0].lat,goldenGatePosition[0].lng,goldenGatePosition[lastplace].lat,goldenGatePosition[lastplace].lng);
+    // var distance =  getDistanceFromLatLonInKm(goldenGatePosition[0].lat,goldenGatePosition[0].lng,goldenGatePosition[lastplace].lat,goldenGatePosition[lastplace].lng);
     for (let i = 0; i < goldenGatePosition.length; i++) {
            
             var marker = new google.maps.Marker({ 
@@ -137,32 +137,7 @@
                                                          infowindow.setContent(results[0].formatted_address);
                                                          infowindow.setPosition(latlng);
                                                           infowindow.open(map)
-                                                   
-                                                          // map.setCenter(results[0].geometry.location);
-                                                        
-                                                          // var infowindow = new google.maps.InfoWindow({
-                                                          //         content: locations[k].details+'<br><b>' + results[0].formatted_address + '</b>',
-                                                          //         size: new google.maps.Size(150, 50)
-                                                          // });
-
-                                                          // var marker = new google.maps.Marker({
-                                                          // position: results[0].geometry.location,
-                                                          // map: map,
-                                                          // // content: details+ results[0].formatted_address
-                                                          // });
-                                                          // google.maps.event.addListener(marker, 'mouseover', function() {
-                                                          // infowindow.open(map, marker);
-                                                          // });
-
-                                                          // google.maps.event.addListener(marker, 'mouseout', function() {
-                                                          //                 infowindow.close();
-                                                          // });
-
-                                                          // google.maps.event.addListener(marker, 'click', function(e) {
-                                                          //         Livewire.emit('getDetailPath',  user_id, date);
-                                                          // });
-
-                                              
+                                                       
                                                   } else {
                                                         alert("No results found");
                                                   }

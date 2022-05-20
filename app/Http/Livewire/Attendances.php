@@ -94,7 +94,6 @@ class Attendances extends Component
     public function pathView($user_id, $dateVal){
 
         $this->mapView = true;
-
         $this->mapPath = false;
         $this->detailView = false;
         $this->attendanceView = false;
