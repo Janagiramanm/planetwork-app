@@ -141,7 +141,7 @@ class Dashboard extends Component
         ->orderBy('time', 'asc')
         ->get();
 
-        echo '<pre>';
+        // echo '<pre>';
         print_r($locations);
 
         // if(!$this->locations ->isEmpty()){
