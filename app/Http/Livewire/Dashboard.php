@@ -135,7 +135,7 @@ class Dashboard extends Component
         $this->mapPath = true;
         $this->apiKey = env('GOOGLEMAPAPI');
         // $idealLocation = $this->idealLocations($this->uId, $this->date);
-        $locations = TrackLocations::where('date', '=', $this->date)
+        $locations = TrackLocations::select('latitude','longitude')->where('date', '=', $this->date)
         ->where('user_id', '=', $this->uId)
         // ->whereBetween('time',[$start_time,$end_time])
         ->orderBy('time', 'asc')
