@@ -135,20 +135,23 @@ class Dashboard extends Component
         $this->mapPath = true;
         $this->apiKey = env('GOOGLEMAPAPI');
         // $idealLocation = $this->idealLocations($this->uId, $this->date);
-        $this->locations = TrackLocations::where('date', '=', $this->date)
+        $locations = TrackLocations::where('date', '=', $this->date)
         ->where('user_id', '=', $this->uId)
         // ->whereBetween('time',[$start_time,$end_time])
         ->orderBy('time', 'asc')
         ->get();
 
-        if(!$this->locations ->isEmpty()){
-            foreach($this->locations as $key => $value){
-                $details = '<b>'.$value->user->name.'</b><br> Date : '.date('d-m-Y',strtotime($value->date)) 
-                          .'<br> Time : '. $value->time;
-                $reslatLong[] = ['lat'=>$value->latitude, 'lng'=>$value->longitude, 'time'=>$value->time];
-            }
-            $this->reslatLong =  json_encode($reslatLong, JSON_NUMERIC_CHECK);
-        }
+        echo '<pre>';
+        print_r($locations);
+
+        // if(!$this->locations ->isEmpty()){
+        //     foreach($this->locations as $key => $value){
+        //         $details = '<b>'.$value->user->name.'</b><br> Date : '.date('d-m-Y',strtotime($value->date)) 
+        //                   .'<br> Time : '. $value->time;
+        //         $reslatLong[] = ['lat'=>$value->latitude, 'lng'=>$value->longitude, 'time'=>$value->time];
+        //     }
+        //     $this->reslatLong =  json_encode($reslatLong, JSON_NUMERIC_CHECK);
+        // }
     }
 
 
