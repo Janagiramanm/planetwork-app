@@ -30,7 +30,7 @@ class Dashboard extends Component
    
     public function render()
     {
-        $curdate = date('Y-m-d'); //'2022-05-18'; //    
+        $curdate = '';// date('Y-m-d'); //'2022-05-18'; //    
         
         $user_id = isset($_GET['user_id'])!='' ? $_GET['user_id']:'';
         $date = isset($_GET['date'])!='' ? $_GET['date']:'';
@@ -56,9 +56,9 @@ class Dashboard extends Component
                 $users[$user->id]['name'] = $user->name;
                 $users[$user->id]['lat']  = $user->employeeDetail->latitude ?? 13.02313732; 
                 $users[$user->id]['lng']  = $user->employeeDetail->longitude ?? 77.6471962; 
-               // if($date !=''){
+               if($curdate !=''){
                     $dateCondition = "and date = '".$curdate."'"; 
-               // }
+               }
                 $users[$user->id]['location'] = DB::select('SELECT * 
                                         FROM track_locations 
                                         INNER JOIN 
