@@ -8,6 +8,10 @@
 </x-slot>
 @if($detailMap)
             @include('livewire.dashboard.detailMap')
+            
+@elseif($mapPath)
+            @include('livewire.dashboard.map')
+
 @else
 
 <div class="py-12">
@@ -80,7 +84,8 @@ $('document').ready(function(){
                  var APP_URL = {!! json_encode(url('/')) !!}
                 // alert(APP_URL);
                 //  alert(baseUrl);
-                //const infowindow = new google.maps.InfoWindow();
+                 console.log('LOC===',locations);
+               //const infowindow = new google.maps.InfoWindow();
                // var infowindow = [];
                
                 var map = new google.maps.Map(document.getElementById('map'), {

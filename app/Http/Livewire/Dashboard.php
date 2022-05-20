@@ -30,7 +30,7 @@ class Dashboard extends Component
    
     public function render()
     {
-        $curdate = date('Y-m-d H:i:s');
+        $curdate = date('Y-m-d'); //'2022-05-18'; //    
         
         $user_id = isset($_GET['user_id'])!='' ? $_GET['user_id']:'';
         $date = isset($_GET['date'])!='' ? $_GET['date']:'';
@@ -49,15 +49,16 @@ class Dashboard extends Component
         $trackIds = [];
         $users = [];
         $dateCondition ='';
+       
         if($usersList){
             foreach($usersList as $user){
 
                 $users[$user->id]['name'] = $user->name;
                 $users[$user->id]['lat']  = $user->employeeDetail->latitude ?? 13.02313732; 
                 $users[$user->id]['lng']  = $user->employeeDetail->longitude ?? 77.6471962; 
-                if($date !=''){
-                    $dateCondition = "and date = '".$date."'"; 
-                }
+               // if($date !=''){
+                    $dateCondition = "and date = '".$curdate."'"; 
+               // }
                 $users[$user->id]['location'] = DB::select('SELECT * 
                                         FROM track_locations 
                                         INNER JOIN 
@@ -65,8 +66,9 @@ class Dashboard extends Component
                                         ON last_updates.id = track_locations.id');
             }
 
-            $res = [];
-  
+            $res[] = ['lat'=>'13.00232321', 'lng'=>'77.9899200', 'details'=>'', 'user_id'=>'', 'date'=>$curdate, 'markerColor'=>''];
+            $this->lat = '13.00232321';
+            $this->lng = '77.9899200';
             if($users){
                 foreach($users as $key => $value){
                      
@@ -99,6 +101,7 @@ class Dashboard extends Component
        
         $this->user_id = $user_id ?? '';
         $this->latLong = json_encode($res, JSON_NUMERIC_CHECK);
+     
         $this->baseUrl = URL::to('/');
 
         return view('livewire.dashboard.dashboard');
