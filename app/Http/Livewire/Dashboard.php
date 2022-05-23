@@ -30,7 +30,7 @@ class Dashboard extends Component
    
     public function render()
     {
-        $curdate = '2022-05-18';// date('Y-m-d'); //'2022-05-18'; //     
+        $curdate =  date('Y-m-d'); //'2022-05-18'; //     
         $user_id = isset($_GET['user_id'])!='' ? $_GET['user_id']:'';
         $date = isset($_GET['date'])!='' ? $_GET['date']:'';
        

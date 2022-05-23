@@ -431,10 +431,7 @@ class ApiController extends Controller
             ->where('login','=', $login_time)
             ->where('user_id', '=', $user_id)
             ->first();
-            
-
             if($attendance){
-
                    if($logout_time != '0'){
                         $to = Carbon::createFromFormat('Y-m-d H:i:s', $logout_time);
                         $from = Carbon::createFromFormat('Y-m-d H:i:s', $login_time);
