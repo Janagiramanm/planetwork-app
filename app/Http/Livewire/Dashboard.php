@@ -140,18 +140,8 @@ class Dashboard extends Component
         ->orderBy('time', 'asc')
         ->get();
 
-        // echo '<pre>';
-        // print_r($locations);
-
-        // if(!$this->locations ->isEmpty()){
-        //     foreach($this->locations as $key => $value){
-        //         $details = '<b>'.$value->user->name.'</b><br> Date : '.date('d-m-Y',strtotime($value->date)) 
-        //                   .'<br> Time : '. $value->time;
-        //         $reslatLong[] = ['lat'=>$value->latitude, 'lng'=>$value->longitude, 'time'=>$value->time];
-        //     }
-            $this->reslatLong =  json_encode($locations, JSON_NUMERIC_CHECK);
-            //print_r($this->reslatLong);
-        // }
+        $this->reslatLong =  json_encode($locations, JSON_NUMERIC_CHECK);
+        
     }
 
 
@@ -159,7 +149,9 @@ class Dashboard extends Component
     public function back(){
         $this->detailMap = false;
        // $this->render();
-        return redirect(request()->header('Referer'));
+       $this->mapPath = false;
+       $this->detailMap = false;
+        // return redirect(request()->header('Referer'));
     }
 
       

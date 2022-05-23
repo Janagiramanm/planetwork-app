@@ -58,6 +58,9 @@ Route::get('holidays', Holidays::class)->name('holidays');
 
 Route::get('attendance', Attendances::class)->name('attendance');
 
+Route::get('travelReport', Reports::class, 'travelReport')->name('travel-report');
+// Route::get('/', [TestController::class,'index'])->name('test');
+
 Route::get('cron-report', [App\Http\Controllers\CronJobController::class, 'cronWrokReport'])->name('cron-report');
 
 Route::get('/notification', [App\Http\Controllers\NotificationController::class, 'index'])->name('home');
