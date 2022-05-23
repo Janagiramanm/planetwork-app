@@ -24,14 +24,21 @@ class Reports extends Component
     {
 
         $route = Route::current()->getName();
-        if($route == 'travel-report'){
+        // if($route == 'travel-report' ){
             
-            $this->travelReport();
-            $this->generateTravelReport();
-            return view('livewire.reports.travel-report');
-            // return $this->redirect('/travelReport');
+        //     $this->travelReport();
+        //      $this->generateTravelReport();
+        //     // $month_number = date("m",strtotime($this->month));
+        //     // $date = $this->year.'-'.$month_number;
+        //     // $this->result = WorkReport::when($this->user_id, function ($query, $user_id) {
+        //     //           return $query->where('user_id', '=', $user_id);
+        //     //  })->groupBy('user_id')
+        //     // ->selectRaw('user_id, sum(travel_distance) as travel_distance')
+        //     // ->where('date','LIKE',$date.'-%')->get();
+        //     return view('livewire.reports.travel-report');
+        //     // return $this->redirect('/travelReport');
 
-        }else{
+        // }else{
             $now = Carbon::now();
             $this->month =$this->month? $this->month : date('M');
             $this->year = $now->year;
@@ -44,7 +51,7 @@ class Reports extends Component
     
             return view('livewire.reports.reports');
 
-        }
+        // }
        
      
     }
@@ -244,8 +251,7 @@ class Reports extends Component
     }
 
     public function viewPath($user_id, $start, $end){
-            echo $user_id;
-            exit;
+           
             $this->reportShow = false;
             $this->viewPath = true;
     }
@@ -262,27 +268,5 @@ class Reports extends Component
         $this->generateWorkReport();
     }
 
-    public function travelReport(){
-        // echo 'COSMOSN';
-        // return view('livewire.reports.travel-report');
-        $now = Carbon::now();
-        $this->month =$this->month? $this->month : date('M');
-        $this->year = $now->year;
-        for($i=1; $i <=3; $i++ ){
-             $this->years[] = $this->year+1 - $i;
-        }
-        $this->users = UserRole::where('role_id','=',3)->get();
-        $this->months = ['January','February','March','April','May',
-        'June','July','August','September','October','November','December'];
-    }
-
-    public function generateTravelReport(){ 
-        $month_number = date("m",strtotime($this->month));
-        $date = $this->year.'-'.$month_number;
-        $this->result = WorkReport::groupBy('user_id')
-        ->selectRaw('user_id, sum(travel_distance) as travel_distance')
-        ->where('date','LIKE',$date.'-%')->get();
-
-     
-    }
+   
 }

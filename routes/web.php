@@ -15,6 +15,7 @@ use App\Http\Livewire\Dashboard;
 use App\Http\Livewire\Reports;
 use App\Http\Livewire\Holidays;
 use App\Http\Livewire\Attendances;
+use App\Http\Livewire\TravelReports;
 
 
 /*
@@ -58,7 +59,7 @@ Route::get('holidays', Holidays::class)->name('holidays');
 
 Route::get('attendance', Attendances::class)->name('attendance');
 
-Route::get('travelReport', Reports::class, 'travelReport')->name('travel-report');
+Route::get('travelReport', TravelReports::class)->name('travel-report');
 // Route::get('/', [TestController::class,'index'])->name('test');
 
 Route::get('cron-report', [App\Http\Controllers\CronJobController::class, 'cronWrokReport'])->name('cron-report');

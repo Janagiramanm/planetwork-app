@@ -12,9 +12,12 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4">
 <div class="flex">
+       
         <div   class="w-full mt-2 mr-1 ml-1 "> 
         
-               
+                @if($travelDetail)
+                    @include('livewire.reports.travel-detail')
+                @else
                     <div class="flex flex-wrap -mx-3 mb-6">
                             <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
                                     <x-jet-label for="user_id" value="{{ __('Employee') }}" />
@@ -57,7 +60,7 @@
                             </div>
                           
                             <div class="w-1/5">
-                                 <x-jet-button  class="bg-orange-500 hover:bg-orange-700  mt-4" wire:click="generateTravelReport()" >
+                                 <x-jet-button  class="bg-orange-500 hover:bg-orange-700  mt-4" wire:click="render()" >
                                         Generate
                                  </x-jet-button>
 
@@ -86,14 +89,15 @@
                          <tr class="bg-gray-100">
                                 
                                     <th class="py-2">Employees</th>
-                                    <th class="py-2">Travel distance</th>  
+                                    <th class="py-2">Travel distance</th> 
+                                    <th class="py-2">Total Allowance ( Rs )</th>  
                                     <th class="py-2">View Details</th>  
                                      
                                 </tr>
                                 @if(!$result)
                                    <tr><td colspan="6" class="text-center">No Result Found</td></tr>
                                 @else
-
+                                    
                                     @foreach($result as $key => $value)
                                         <tr >
                                             <td class=" border px-5 py-5 border-b border-gray-200 bg-white text-sm"><a href="/users?id={{ $value['user_id'] }}">{{ $value->user->name }}</a> </td>  
@@ -104,21 +108,16 @@
                                                          {{ $value['travel_distance'] }} km 
                                                         
                                                
-                                            </td> 
-                                            <td class=" border px-5 py-5 border-b border-gray-200 bg-white text-sm cursor-pointer" wire:click="viewPath({{$value['user_id']}},{{$value['start']}}, {{$value['end']}})"> View Details</td> 
+                                            </td>
+                                            <td class="border"></td> 
+                                            <td class=" border px-5 py-5 border-b border-gray-200 bg-white text-sm cursor-pointer" wire:click="viewTravelDetails({{$value['user_id']}})"> View Details</td> 
                                                                                                                                                                                                                    
                                         </tr>
                                     @endforeach
                                 @endif
                          </table>
                     </div>
-                    
-               
-                
-                
-           
-                  
-         
+                    @endif
         </div>
       
 <style>
