@@ -473,7 +473,8 @@ class ApiController extends Controller
 
         $date = $year.'-'.$month;
        
-        $attendance = Attendance::selectRaw('user_id,sum(minutes) as minutes')
+        $attendance = Attendance::groupBy('user_id')
+        ->selectRaw('user_id,sum(minutes) as minutes')
         ->where('date','LIKE',$date.'-%')
         ->where('user_id','=', $user_id)->first();
         // if(!$attendance){
@@ -486,7 +487,8 @@ class ApiController extends Controller
         $details =  DB::select("select user_id,date,min(login) as login,max(logout) as logout,sum(minutes) as minutes 
         FROM `attendances` where user_id = $user_id and date LIKE '$date%' GROUP BY date,user_id");
 
-      
+        // echo '<pre>';
+        // print_r($attendance);
         $monthDays = Carbon::now()->month($month)->daysInMonth;
         $result =[
             'status' => '1',
