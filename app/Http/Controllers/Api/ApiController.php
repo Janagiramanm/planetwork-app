@@ -73,7 +73,7 @@ class ApiController extends Controller
          
            $data = $request->data;      
         //    $distance_km = 0.0;
-           $travel = 0 ;
+           $distance = 0 ;
            if($data){
             
             // $insert = TrackLocations::insert($data);
@@ -145,7 +145,7 @@ class ApiController extends Controller
                             $workReport->date = $value['date'];
                             $workReport->user_id = $value['user_id'];
                             $workReport->job_id = $value['job_id'];
-                            $workReport->travel_distance = $travel;
+                            $workReport->travel_distance = $distance;
                             $workReport->from_lat = $value['latitude'];
                             $workReport->from_lng = $value['longitude'];
                             $workReport->to_lat = $value['latitude'];
@@ -160,9 +160,7 @@ class ApiController extends Controller
             // if($insert){
                 return [
                     'status' => 1,
-                    'message' => 'Successfully Inserted.',
-                    'distance' => $distance,
-                    'travel_distance' => $travelDistance
+                    'message' => 'Successfully Inserted.'                  
                ];
             // }
                
@@ -170,9 +168,7 @@ class ApiController extends Controller
 
            return [
              'status' => 0,
-             'message' => 'Empty data is coming .',
-             'distance' => $distance,
-             'travel_distance' => $travelDistance
+             'message' => 'Empty data is coming .'
             ];
            
     }
@@ -493,7 +489,7 @@ class ApiController extends Controller
         $result =[
             'status' => '1',
             'actual_hours' => $attendance->minutes,
-            'total_hours' => '219',
+            'total_hours' => '13140',
             
         ];
         

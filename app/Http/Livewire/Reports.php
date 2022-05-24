@@ -82,6 +82,7 @@ class Reports extends Component
                   ->where('work_reports.user_id','=', $this->user_id)
                   ->where('work_reports.date','LIKE',$date.'-%')
                   ->where('work_reports.job_id','!=','0')
+                  ->orderBy('work_reports.id', 'DESC')
                   ->get();
        
         
