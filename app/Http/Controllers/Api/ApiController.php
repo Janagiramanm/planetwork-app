@@ -220,6 +220,7 @@ class ApiController extends Controller
       $res = WorkReport::where('user_id','=', $user_id)
       ->where('job_id','!=','0')
       ->whereBetween('date',[$from_date, $to_date])
+      ->orderBy('id','DESC')
       ->get();
 
         $dateWiseData = [];
