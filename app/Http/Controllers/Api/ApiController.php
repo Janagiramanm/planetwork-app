@@ -486,7 +486,8 @@ class ApiController extends Controller
         $details =  DB::select("select user_id,date,min(login) as login,max(logout) as logout,sum(minutes) as minutes 
         FROM `attendances` where user_id = $user_id and date LIKE '$date%' GROUP BY date,user_id");
 
-        
+        echo '<pre>';
+        print_r($attendance);
         $monthDays = Carbon::now()->month($month)->daysInMonth;
         $result =[
             'status' => '1',
