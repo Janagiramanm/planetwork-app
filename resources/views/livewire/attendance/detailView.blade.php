@@ -38,7 +38,7 @@
                                                         $date_val =  date('d-m-Y',strtotime($value->date));
                                                         if($value1['date'] ==  $date_val){
                                                             // echo $value->logout.'=='.$value->login.'<br>';
-                                                            $value->logout = ($value->logout != '') ? date('H:i',strtotime($value->logout)) : '--';
+                                                            $value->logout = ($value->logout != 0 ) ? date('H:i',strtotime($value->logout)) : '--';
                                                             $working_hours = '0';
                                                             $working_hours_display = '--';
                                                             $hours = 0;
