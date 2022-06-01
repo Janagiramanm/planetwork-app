@@ -488,8 +488,7 @@ class ApiController extends Controller
         $details =  DB::select("select user_id,date,min(login) as login,max(logout) as logout,sum(minutes) as minutes 
         FROM `attendances` where user_id = $user_id and date LIKE '$date%' GROUP BY date,user_id");
 
-        // echo '<pre>';
-        // print_r($attendance);
+       
         $monthDays = Carbon::now()->month($month)->daysInMonth;
         $result =[
             'status' => '1',
@@ -497,6 +496,9 @@ class ApiController extends Controller
             'total_hours' => '13140',
             
         ];
+        echo '<pre>';
+        print_r($details);
+        exit;
         
         for($i=1; $i <= $monthDays; $i++){
              $date = $i.'-'.$month.'-'.$year;
