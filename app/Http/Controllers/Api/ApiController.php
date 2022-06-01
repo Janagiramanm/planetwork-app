@@ -496,9 +496,9 @@ class ApiController extends Controller
             'total_hours' => '13140',
             
         ];
-        echo '<pre>';
-        print_r($details);
-        exit;
+        // echo '<pre>';
+        // print_r($details);
+        // exit;
         
         for($i=1; $i <= $monthDays; $i++){
              $date = $i.'-'.$month.'-'.$year;
@@ -508,6 +508,7 @@ class ApiController extends Controller
              $logout = '0';
              $actual_hours = '0';
              foreach($details as $key => $value){
+                 echo $date .'=='.date('d-m-Y',strtotime($value->date));
                  if($date == date('d-m-Y',strtotime($value->date))){
                      $login = date('H:i',strtotime($value->login));
                      $logout = $value->logout ? date('H:i',strtotime($value->logout)): '0';
