@@ -478,13 +478,6 @@ class ApiController extends Controller
         ->selectRaw('user_id,sum(minutes) as minutes')
         ->where('date','LIKE',$date.'-%')
         ->where('user_id','=', $user_id)->first();
-        // if(!$attendance){
-        //       return = [
-        //           'status'=>'0',
-        //           'message' => 'No records found'
-        //       ];
-        // }
-
         $details =  DB::select("select user_id,date,min(login) as login,max(logout) as logout,sum(minutes) as minutes 
         FROM `attendances` where user_id = $user_id and date LIKE '$date%' GROUP BY date,user_id");
 
@@ -496,11 +489,8 @@ class ApiController extends Controller
             'total_hours' => '13140',
             
         ];
-        // echo '<pre>';
-        // print_r($details);
-        // exit;
         
-        for($i=01; $i <= $monthDays; $i++){
+        for($i=1; $i <= $monthDays; $i++){
               if($i < 10){
                 $i = '0'.$i;
               }
@@ -511,7 +501,6 @@ class ApiController extends Controller
              $logout = '0';
              $actual_hours = '0';
              foreach($details as $key => $value){
-                 echo $date .'=='.date('d-m-Y',strtotime($value->date));
                  if($date == date('d-m-Y',strtotime($value->date))){
                      $login = date('H:i',strtotime($value->login));
                      $logout = $value->logout ? date('H:i',strtotime($value->logout)): '0';
