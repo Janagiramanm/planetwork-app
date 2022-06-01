@@ -501,6 +501,9 @@ class ApiController extends Controller
         // exit;
         
         for($i=01; $i <= $monthDays; $i++){
+              if($i < 10){
+                $i = '0'.$i;
+              }
              $date = $i.'-'.$month.'-'.$year;
              $day = Carbon::createFromFormat('d-m-Y', $i.'-'.$month.'-'.$year)->format('l');
              $holiday = Holiday::where('date','=',date('Y-m-d',strtotime($date)))->first();
