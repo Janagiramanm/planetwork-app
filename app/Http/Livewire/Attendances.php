@@ -62,6 +62,9 @@ class Attendances extends Component
         $this->employee = User::find($user_id);
         $this->user_id = $user_id;
         for($i=1; $i <= $this->monthDays; $i++){
+            if($i < 10){
+                $i = '0'.$i;
+              }
              $date = $i.'-'.$month_no.'-'.$this->year;
              $day = Carbon::createFromFormat('d-m-Y', $i.'-'.$month_no.'-'.$this->year)->format('l');
              $holiday = Holiday::where('date','=',date('Y-m-d',strtotime($date)))->first();
