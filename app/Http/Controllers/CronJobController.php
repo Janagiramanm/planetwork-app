@@ -64,8 +64,10 @@ class CronJobController extends Controller
                                 ->where('user_id','=', $value['user_id'])
                                 ->where('job_id','=',$value['job_id'])
                                 ->first();
-                    $from_address = $this->getAddress($value['track'][0]->latitude,$value['track'][0]->longitude);
-                    $to_address = $this->getAddress($value['track'][1]->latitude,$value['track'][1]->longitude);
+                        $from_address = "Null";
+                        $to_address = "Null";
+                    // $from_address = $this->getAddress($value['track'][0]->latitude,$value['track'][0]->longitude);
+                    // $to_address = $this->getAddress($value['track'][1]->latitude,$value['track'][1]->longitude);
                                 
                     if(!$isExist){
                             $workReport = new WorkReport();
@@ -176,11 +178,15 @@ class CronJobController extends Controller
     }
 
     public function getAddress($lat,$lng){
-        $url="https://maps.google.com/maps/api/geocode/json?latlng=".$lat.",".$lng."&key=".env('GOOGLEMAPAPI');
-        $curl_return=$this->curl_get($url);
-        $obj=json_decode($curl_return);
-        return $obj->results[0]->formatted_address;
+        return 'null';
     }
+
+    // public function getAddress($lat,$lng){
+    //     $url="https://maps.google.com/maps/api/geocode/json?latlng=".$lat.",".$lng."&key=".env('GOOGLEMAPAPI');
+    //     $curl_return=$this->curl_get($url);
+    //     $obj=json_decode($curl_return);
+    //     return $obj->results[0]->formatted_address;
+    // }
 
     public function curl_get($url,  array $options = array())
     {

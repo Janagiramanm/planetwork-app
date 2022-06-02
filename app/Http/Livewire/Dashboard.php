@@ -183,20 +183,24 @@ class Dashboard extends Component
              return $miles;
         }
       }  
-      
+
       public function getAddressByLatLng($lat, $lng){
-        
-        $latLng = $lat.','.$lng;
-        $this->apiKey = env('GOOGLEMAPAPI');
-        $geocode=file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?latlng='.$latLng.'&sensor=false&key='.$this->apiKey);
-        // $geocode=file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$prepAddr.'&sensor=false');
-        $output= json_decode($geocode);
-        if(isset($output->results[0]->formatted_address)){
-           return $output->results[0]->formatted_address;
-        }
-        return null;
-       
+          return 'null';
       }
+      
+    //   public function getAddressByLatLng($lat, $lng){
+        
+    //     $latLng = $lat.','.$lng;
+    //     $this->apiKey = env('GOOGLEMAPAPI');
+    //     $geocode=file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?latlng='.$latLng.'&sensor=false&key='.$this->apiKey);
+    //     // $geocode=file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$prepAddr.'&sensor=false');
+    //     $output= json_decode($geocode);
+    //     if(isset($output->results[0]->formatted_address)){
+    //        return $output->results[0]->formatted_address;
+    //     }
+    //     return null;
+       
+    //   }
 
     public function idealLocations($user_id, $date){
                    $result  = DB::select('SELECT * 

@@ -192,11 +192,15 @@ class Reports extends Component
     }
 
     public function getAddress($lat,$lng){
-        $url="https://maps.google.com/maps/api/geocode/json?latlng=".$lat.",".$lng."&key=".env('GOOGLEMAPAPI');
-        $curl_return=$this->curl_get($url);
-        $obj=json_decode($curl_return);
-        return $obj->results[0]->formatted_address;
+        return 'null';
     }
+
+    // public function getAddress($lat,$lng){
+    //     $url="https://maps.google.com/maps/api/geocode/json?latlng=".$lat.",".$lng."&key=".env('GOOGLEMAPAPI');
+    //     $curl_return=$this->curl_get($url);
+    //     $obj=json_decode($curl_return);
+    //     return $obj->results[0]->formatted_address;
+    // }
 
     public function curl_get($url,  array $options = array())
     {

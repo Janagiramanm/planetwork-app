@@ -109,7 +109,7 @@ class ApiController extends Controller
                             $workReport->travel_distance = (float)$travelDistance;
                             $workReport->to_lat = $value['latitude'];
                             $workReport->to_lng = $value['longitude'];
-                            $workReport->to_address =  $this->getAddress( $value['latitude'],$value['longitude']);
+                            //$workReport->to_address =  $this->getAddress( $value['latitude'],$value['longitude']);
                             $workReport->end = $value['time'];
                             if($track->is_reached == 'true'){
                                $workReport->is_reached = 'true';
@@ -131,12 +131,12 @@ class ApiController extends Controller
                             if($track->is_reached == 'true'){
                                 $workReport->is_reached = 'true';
                              }
-                            $workReport->from_address =  $this->getAddress( $value['latitude'],$value['longitude']);
-                            $workReport->to_address =  $this->getAddress( $value['latitude'],$value['longitude']);
+                            // $workReport->from_address =  $this->getAddress( $value['latitude'],$value['longitude']);
+                            // $workReport->to_address =  $this->getAddress( $value['latitude'],$value['longitude']);
                             $workReport->save();
                         }
                        
-                    //    echo  $report->travel_distance.'==='.$distance.'+++++'.$report->travel_distance + $distance."<br>";
+                        
                        
                        
                     }
@@ -150,7 +150,7 @@ class ApiController extends Controller
                             $workReport->from_lng = $value['longitude'];
                             $workReport->to_lat = $value['latitude'];
                             $workReport->to_lng = $value['longitude'];
-                            $workReport->from_address = $this->getAddress( $value['latitude'],$value['longitude']);
+                            // $workReport->from_address = $this->getAddress( $value['latitude'],$value['longitude']);
                             $workReport->start = $value['time'];
                             $workReport->end = $value['time'];
                             $workReport->save();
@@ -242,8 +242,8 @@ class ApiController extends Controller
                             $dateWiseData[$key]['job_status'] = $value->job->employees;
                             $dateWiseData[$key]['sr_no'] = $value->job->sr_no;
                             $dateWiseData[$key]['travel_distance'] = $value->travel_distance;
-                            $dateWiseData[$key]['from_address'] = $this->getAddress($value->from_lat,$value->from_lng);
-                            $dateWiseData[$key]['to_address'] = $this->getAddress($value->to_lat,$value->to_lng);
+                            // $dateWiseData[$key]['from_address'] = $this->getAddress($value->from_lat,$value->from_lng);
+                            // $dateWiseData[$key]['to_address'] = $this->getAddress($value->to_lat,$value->to_lng);
                             $dateWiseData[$key]['start'] = $value->start;
                             $dateWiseData[$key]['end'] = $value->end;
                         }
@@ -264,17 +264,20 @@ class ApiController extends Controller
         ];
 
     }
-
     public function getAddress($lat,$lng){
-        $url="https://maps.google.com/maps/api/geocode/json?latlng=".$lat.",".$lng."&key=".env('GOOGLEMAPAPI');
-        $curl_return=$this->curl_get($url);
-        $obj=json_decode($curl_return);
-        if(isset($obj->results[0])){
-            return $obj->results[0]->formatted_address;
-        }
         return 'null';
-       
     }
+
+    // public function getAddress($lat,$lng){
+    //     $url="https://maps.google.com/maps/api/geocode/json?latlng=".$lat.",".$lng."&key=".env('GOOGLEMAPAPI');
+    //     $curl_return=$this->curl_get($url);
+    //     $obj=json_decode($curl_return);
+    //     if(isset($obj->results[0])){
+    //         return $obj->results[0]->formatted_address;
+    //     }
+    //     return 'null';
+    // }
+
     public function curl_get($url,  array $options = array())
     {
             $defaults = array(
