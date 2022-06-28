@@ -242,6 +242,8 @@ class ApiController extends Controller
                             $dateWiseData[$key]['job_status'] = $value->job->employees;
                             $dateWiseData[$key]['sr_no'] = $value->job->sr_no;
                             $dateWiseData[$key]['travel_distance'] = $value->travel_distance;
+                            $dateWiseData[$key]['from_address'] = $value->from_address;
+                            $dateWiseData[$key]['to_address'] = $value->job->customerLocation->address;
                             // $dateWiseData[$key]['from_address'] = $this->getAddress($value->from_lat,$value->from_lng);
                             // $dateWiseData[$key]['to_address'] = $this->getAddress($value->to_lat,$value->to_lng);
                             $dateWiseData[$key]['start'] = $value->start;
